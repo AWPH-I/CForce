@@ -1,9 +1,30 @@
 extends layout
 
+block stylesheets
+    link(rel='stylesheet', href='/stylesheets/index.css')
+
 block scripts
     script(src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js")
     script(src="/javascripts/client-index.js")
 
 block content
-    h1= title
-    p Welcome to #{title}
+    nav.navbar.navbar-default.fixed-top.navbar-light.bg-light(style='position: relative;')
+        a.navbar-brand(href='#')
+        |     
+        button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
+            span.navbar-toggler-icon
+        |     
+        #navbarSupportedContent.collapse.navbar-collapse
+            ul.navbar-nav.mr-auto           
+                li.nav-item
+                    a.nav-link(href='#') Sign Out  
+
+    .container-fluid(style='height: 100%;')
+        .row
+            .col-9
+
+            .col-3.col-sm-offset-4.frame
+                ul
+                .msj-rta.macro(style='margin:auto;')
+                .form-group
+                    textarea.form-control(rows='5', id='chatTextarea', style='resize: none;')

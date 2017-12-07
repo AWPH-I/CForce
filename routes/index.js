@@ -24,7 +24,7 @@ function RouletteObj() {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('index', { title: 'CSForce Roulette'})
+    res.render('index', { title: 'CForce Roulette'})
 });
 
 module.exports = router;
