@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var User = require('mongoose').model('User');
 
 const Roulette = new RouletteObj();
 
@@ -24,7 +25,6 @@ router.get('/', function(req, res, next) {
 global.io.on('connection', function(socket){
     //Server receiving a chat message
     socket.on('chat-send', function(msg){
-        /*
         if(!socket.handshake.session.userId) {
             //Add 1 to the cooldown and blacklist their IP soon
             return;
@@ -40,10 +40,9 @@ global.io.on('connection', function(socket){
                 user = foundUser;
             }
         });
-        */
         msg = sanitiseMessage(msg);
-        console.log(/*user*/ + ' ' + msg);
-        io.emit('chat-receive', {/*from: user.username,*/ message: msg});
+        console.log(user + ': ' + msg);
+        io.emit('chat-receive', {from: user.username, message: msg});
     });
 });
 
