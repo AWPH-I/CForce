@@ -20,6 +20,7 @@ server.listen(8081);
 
 // connect to db
 mongoose.connect('mongodb://localhost/CForce');
+const db = mongoose.connection;
 
 
 // view engine setup
