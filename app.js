@@ -18,7 +18,7 @@ var app = express();
 // connect to db
 mongoose.connect('mongodb://localhost/CForce');
 const db = mongoose.connection;
-require('./models/User');
+require('./models/user');
 
 //Create socketIO server
 var server = require('http').Server(app);
