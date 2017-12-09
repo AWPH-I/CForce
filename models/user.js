@@ -22,7 +22,7 @@ var UserSchema = new mongoose.Schema({
   }
 });
 
-UserSchema.methods.authenticate = function(email, password, callback) {
+UserSchema.statics.authenticate = function(email, password, callback) {
     User.findOne({ email: email }).exec(function (err, user) {
         //Catches err or non-existent user
         if (err) {

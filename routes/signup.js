@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var User = ('.../models/user');
+var User = require('mongoose').model('User');
 
 router.get('/', function(req, res, next) {
     res.render('signup', { title: 'Sign Up'})

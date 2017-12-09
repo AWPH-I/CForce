@@ -4,24 +4,26 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+
 var session = require('express-session');
 var sharedsession = require("express-socket.io-session");
 
-var MongoStore = require('connect-mongostore')(session);
+
 
 var mongoose = require('mongoose');
+var MongoStore = require('connect-mongostore')(session);
+
 var app = express();
-
-//Create socketIO server
-var server = require('http').Server(app);
-
-global.io = require('socket.io')(server);
-server.listen(8081);
 
 // connect to db
 mongoose.connect('mongodb://localhost/CForce');
 const db = mongoose.connection;
+require('./models/User');
 
+//Create socketIO server
+var server = require('http').Server(app);
+global.io = require('socket.io')(server);
+server.listen(8081);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -50,15 +52,6 @@ global.io.use(sharedsession(sess, {
     autoSave:true
 })); 
 
-// routes
-app.use('/', require('./routes/index'));
-app.use('/imprint', require('./routes/imprint'));
-
-app.use('/login', require('./routes/login'));
-app.use('/logout',require('./routes/logout'));
-app.use('/profile',require('./routes/profile'));
-app.use('/signup',require('./routes/signup'));
-
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
@@ -77,5 +70,14 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+// routes
+app.use('/', require('./routes/index'));
+app.use('/imprint', require('./routes/imprint'));
+
+app.use('/login', require('./routes/login'));
+app.use('/logout',require('./routes/logout'));
+app.use('/profile',require('./routes/profile'));
+app.use('/signup',require('./routes/signup'));
 
 module.exports = app;
