@@ -5,12 +5,19 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var sharedsession = require("express-socket.io-session");
 
 var mongoose = require('mongoose');
 var app = express();
 
+//Create socketIO server
+var server = require('http').Server(app);
+
+global.io = require('socket.io')(server);
+server.listen(8081);
+
 // connect to db
-//mongoose.connect('mongodb://localhost/CForce');
+mongoose.connect('mongodb://localhost/CForce');
 
 
 // view engine setup
@@ -25,11 +32,29 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+var sess = session({
+  secret: 'seOOOSPAPSDwag167321320sdmSKRRRgucciGAngGG,',
+  resave: true,
+  saveUninitialized: false,
+  store: new MongoStore({
+    mongooseConnection: db
+  })
+});
+
+app.use(sess);
+
+global.io.use(sharedsession(sess, {
+    autoSave:true
+})); 
+
 // routes
-//require('./routes/signup');
-//require('./routes/profile');
 app.use('/', require('./routes/index'));
+app.use('/imprint', require('./routes/imprint'));
+
 app.use('/login', require('./routes/login'));
+app.use('/logout',require('./routes/logout'));
+app.use('/profile',require('./routes/profile'));
+app.use('/signup',require('./routes/signup'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -1,9 +1,25 @@
 extends layout
 
+block stylesheets
+    link(rel='stylesheet', href='/stylesheets/index.css')
+
 block scripts
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js")
-    script(src="/javascripts/client-index.js")
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js')
+    script(src='/javascripts/client-index.js')
 
 block content
-    h1= title
-    p Welcome to #{title}
+    .container-fluid
+        .row
+            .col-md-9
+
+            .col-md-3
+                #chat-box(style='margin-left: auto; margin-right: auto;')
+                    ul#chat-content
+                        li.chat-message
+                            img.chat-avatar(src='/images/MW.svg')
+                            div(style='display: flex; flex-direction: column;')
+                                p.chat-text.chat-username Adam
+                                p.chat-text hgsvdfjhvbjxcvbjksbfjsfjdfgbjhjtgfksgfna,dhsdjbfnmskhfbjsbhgfksghfujbasiksfahu
+                .input-group(style='width: 100%;')
+                    input.form-control(type='text', id='chat-input' maxlength='255')
+                    button.btn.btn-primary#chat-button(type='button') :D

@@ -1,4 +1,13 @@
 extends layout
 
 block content
-    h1 CSForce #{title} Page
+    .container(style='margin-top: 50px;')
+        form(action='/', method='post')
+            .form-group
+                label Email address
+                input.form-control(type='email', name='email', placeholder='Email')
+            .form-group
+                label Password
+                input.form-control(type='password', name='password', placeholder='Password')
+            .form-group
+                button.btn.btn-default(type='submit') Login
