@@ -42,7 +42,7 @@ global.io.on('connection', function(socket){
         });
         */
         msg = sanitiseMessage(msg);
-        console.log(user + ' ' + msg);
+        console.log(/*user*/ + ' ' + msg);
         io.emit('chat-receive', {/*from: user.username,*/ message: msg});
     });
 });
