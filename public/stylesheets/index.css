@@ -2,6 +2,82 @@ body {
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
+#chat-box {
+    height: 400px;
+    width: 100%;
+
+    padding: 20px;
+    margin: 20px;
+
+    overflow-y: auto;
+
+    border: 1px solid transparent;
+    border-radius: 25px;
+    border-color: rgba(0,0,0,.1);
+
+    background-color: #f8f9fa;
+}
+
+#chat-content {
+    padding: 0;
+    margin: 0;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
+.chat-message {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin-bottom: 10px;
+    background-color: rgba(0,0,0,.1);
+    word-break: break-all;
+
+    border-radius: 25px;
+    border: 1px solid transparent;
+    border-color: #ECEFF1;
+}
+
+.chat-username {
+    font-weight: bold;
+    padding-bottom: 0px !important;
+    margin: 0;
+}
+
+.chat-avatar {
+    width: 32px;
+    height: 32px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.chat-text {
+    margin: 0;
+    padding: 5px;
+}
+
+#chat-input {
+    height: 50px;
+    padding-right: 60px;
+    border-radius: 2rem;
+}
+
+#chat-button {
+    height: 50px;
+    width: 50px;
+    position: absolute;
+    right: 0;
+    z-index: 3;
+    border-radius: 0;
+    border-bottom-right-radius: 2rem;
+    border-top-right-radius: 2rem;
+}
+
 a {
     color: #00B7FF;
 }

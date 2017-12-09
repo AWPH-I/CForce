@@ -13,6 +13,19 @@ html
         block scripts
     
     body
+        nav.navbar.navbar-default.fixed-top.navbar-light.bg-light(style='position: relative;')
+            a.navbar-brand(href='#')
+            |     
+            button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
+                span.navbar-toggler-icon
+            |     
+            #navbarSupportedContent.collapse.navbar-collapse
+                ul.navbar-nav.mr-auto           
+                    li.nav-item
+                        a.nav-link(href='#') Sign Out  
+                    li.nav-item
+                        a.nav-link(href='/imprint') Imprint
+        
         block content
         
         script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js', integrity='sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh' crossorigin='anonymous')
