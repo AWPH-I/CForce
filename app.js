@@ -7,6 +7,8 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var sharedsession = require("express-socket.io-session");
 
+var MongoStore = require('connect-mongostore')(session);
+
 var mongoose = require('mongoose');
 var app = express();
 
