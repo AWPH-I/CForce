@@ -16,5 +16,5 @@ block content
                 #chat-box(style='margin-left: auto; margin-right: auto;')
                     ul#chat-content
                 .input-group(style='width: 100%;')
-                    input.form-control(type='text', id='chat-input' maxlength='255')
-                    button.btn.btn-primary#chat-button(type='button') :D
+                    input.form-control(type='text', id='chat-input' maxlength='256')
+                    button.btn.btn-primary#chat-button(type='button', onClick='Chat.messageSend()') :D

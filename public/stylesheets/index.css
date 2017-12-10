@@ -36,6 +36,11 @@ body {
     background-color: rgba(0,0,0,.1);
     word-break: break-all;
 
+    padding-right: 15px;
+    padding-left: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+
     border-radius: 25px;
     border: 1px solid transparent;
     border-color: #ECEFF1;
@@ -50,15 +55,12 @@ body {
 .chat-avatar {
     width: 32px;
     height: 32px;
-    margin-left: 5px;
-    margin-right: 5px;
     margin-top: auto;
     margin-bottom: auto;
 }
 
 .chat-text {
     margin: 0;
-    padding: 5px;
 }
 
 #chat-input {

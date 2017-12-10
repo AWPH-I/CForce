@@ -4,6 +4,8 @@ var Chat;
 function ChatObj() {
     this.box = document.getElementById('chat-box');
     this.content = document.getElementById('chat-content');
+    this.input = document.getElementById('chat-input');
+
     this.messageReceive = function(data) {
         //data.from = senders username
         //data.message = the text they sent
@@ -23,8 +25,8 @@ function ChatObj() {
 
         this.box.scrollTo(0, this.box.scrollHeight);
     }
-    this.messageSend = function(msg) {
-        socket.emit('chat-send', msg);
+    this.messageSend = function() {
+        socket.emit('chat-send', input.value);
     }
 }
 

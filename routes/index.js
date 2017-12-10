@@ -8,13 +8,12 @@ function RouletteObj() {
     this.current = null;
     this.spin = function() {
         this.current = Math.floor(Math.random() * 37);
-        io.emit('test','this is a test');
     } 
     this.interval = setInterval(this.spin, 2000);
 }
 
 function sanitiseMessage(text) {
-    return text;
+    return (String(text)).substring(0,255) + '...';
 }
 
 /* GET home page. */
@@ -23,6 +22,8 @@ router.get('/', function(req, res, next) {
 });
 
 global.io.on('connection', function(socket){
+    var address = socket.handshake.address;
+    
     //Server receiving a chat message
     socket.on('chat-send', function(msg){
         if(!socket.handshake.session.userId) {
@@ -36,7 +37,7 @@ global.io.on('connection', function(socket){
                 return next(err);
             } else {
                 msg = sanitiseMessage(msg);
-                console.log(user.username + ': ' + msg);
+                if(msg == '') return;
                 io.emit('chat-receive', {from: user.username, message: msg});
             }
         });
