@@ -42,16 +42,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 var sess = session({
     secret: 'seOOOSPAPSDwag167321320sdmSKRRRgucciGAngGG,',
     resave: true,
-    saveUninitialized: false,
-    store: new (require('express-sessions'))({
-        storage: 'mongodb',
-        instance: mongoose,
-        host: 'localhost',
-        port: 27017,
-        db: 'CForce',
-        collection: 'sessions',
-        expire: 86400
-    })
+    saveUninitialized: false
 });
 
 app.use(sess);
