@@ -165,6 +165,10 @@ block-stream@*:
   dependencies:
     inherits "~2.0.0"
 
+bluebird@2.10.2:
+  version "2.10.2"
+  resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-2.10.2.tgz#024a5517295308857f14f91f1106fc3b555f446b"
+
 body-parser@~1.18.2:
   version "1.18.2"
   resolved "https://registry.yarnpkg.com/body-parser/-/body-parser-1.18.2.tgz#87678a19d84b47d859b83199bd59bce222b10454"
@@ -385,9 +389,11 @@ dashdash@^1.12.0:
   dependencies:
     assert-plus "^1.0.0"
 
-debug@0.7.4:
-  version "0.7.4"
-  resolved "https://registry.yarnpkg.com/debug/-/debug-0.7.4.tgz#06e1ea8082c2cb14e39806e22e2f6f757f92af39"
+debug@2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-2.2.0.tgz#f87057e995b1a1f6ae6a4960664137bc56f039da"
+  dependencies:
+    ms "0.7.1"
 
 debug@2.6.9, debug@^2.2.0, debug@~2.6.0, debug@~2.6.4, debug@~2.6.6, debug@~2.6.9:
   version "2.6.9"
@@ -823,12 +829,6 @@ kerberos@0.0.11:
   dependencies:
     nan "~1.8"
 
-kerberos@0.0.7:
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/kerberos/-/kerberos-0.0.7.tgz#48db5e268e59ebb1626fd3c76ff8ff7f267a9852"
-  dependencies:
-    nan "1.3.0"
-
 kind-of@^3.0.2:
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-3.2.2.tgz#31ea21a734bab9bbb0f32466d893aea51e4a3c64"
@@ -900,13 +900,13 @@ mongodb-core@3.0.0-rc0:
     bson "~1.0.4"
     require_optional "^1.0.1"
 
-mongodb@1.4.28:
-  version "1.4.28"
-  resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-1.4.28.tgz#4308333aa9b369cc8214a67602527d138bf74e1f"
+mongodb@1.4.38:
+  version "1.4.38"
+  resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-1.4.38.tgz#8cffd618100af3a4648a995498bfcfcb4ed8abd2"
   dependencies:
     bson "~0.2"
   optionalDependencies:
-    kerberos "0.0.7"
+    kerberos "0.0.11"
     readable-stream latest
 
 mongodb@^3.0.0-rc0:
@@ -924,17 +924,17 @@ mongodb@~1.4:
     kerberos "0.0.11"
     readable-stream latest
 
-mongoose@3.8.23:
-  version "3.8.23"
-  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-3.8.23.tgz#c2dbee69d9d3776006330165f6e2681174c2ce6b"
+mongoose@~3.8.22:
+  version "3.8.40"
+  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-3.8.40.tgz#032f5ba55582497559a87c1f3f4b3959c26406a7"
   dependencies:
     hooks "0.2.1"
-    mongodb "1.4.28"
+    mongodb "1.4.38"
     mpath "0.1.1"
     mpromise "0.4.3"
-    mquery "0.8.0"
+    mquery "1.10.0"
     ms "0.1.0"
-    muri "0.3.1"
+    muri "1.1.0"
     regexp-clone "0.0.1"
     sliced "0.0.5"
 
@@ -956,11 +956,12 @@ mpromise@0.4.3:
   version "0.4.3"
   resolved "https://registry.yarnpkg.com/mpromise/-/mpromise-0.4.3.tgz#edc47a75a2a177b0e9382735db52dbec3808cc33"
 
-mquery@0.8.0:
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/mquery/-/mquery-0.8.0.tgz#1e5b8c2a5a52f5583bd08932700b85440ee25f60"
+mquery@1.10.0:
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/mquery/-/mquery-1.10.0.tgz#8603f02b0b524d17ac0539a85996124ee17b7cb3"
   dependencies:
-    debug "0.7.4"
+    bluebird "2.10.2"
+    debug "2.2.0"
     regexp-clone "0.0.1"
     sliced "0.0.5"
 
@@ -968,17 +969,17 @@ ms@0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/ms/-/ms-0.1.0.tgz#f21fac490daf1d7667fd180fe9077389cc9442b2"
 
+ms@0.7.1:
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/ms/-/ms-0.7.1.tgz#9cd13c03adbff25b65effde7ce864ee952017098"
+
 ms@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
 
-muri@0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/muri/-/muri-0.3.1.tgz#861889c5c857f1a43700bee85d50731f61727c9a"
-
-nan@1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/nan/-/nan-1.3.0.tgz#9a5b8d5ef97a10df3050e59b2c362d3baf779742"
+muri@1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/muri/-/muri-1.1.0.tgz#a3a6d74e68a880f433a249a74969cbb665cc0add"
 
 nan@2.6.2:
   version "2.6.2"
