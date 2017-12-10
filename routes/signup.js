@@ -10,7 +10,7 @@ router.post('/', function (req, res, next) {
     console.log('POST received');
     if (req.body.email && req.body.username && req.body.password && req.body.passwordConf) {
         console.log(require('mongoose').connection.readyState);
-        if(passwordConf == password) {
+        if(req.body.passwordConf == req.body.password) {
             var userData = {
                 email: req.body.email,
                 username: req.body.username,
