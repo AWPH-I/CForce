@@ -9,6 +9,7 @@ router.get('/', function(req, res, next) {
 router.post('/', function (req, res, next) {
     if (req.body.email && req.body.password) {
         User.authenticate(req.body.email, req.body.password, function(error, user) {
+            console.log(error + ' ' + user);
             if(error || !user) {
                 var err = new Error('Wrong email or password.');
                 err.status = 401;

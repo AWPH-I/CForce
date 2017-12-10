@@ -16,6 +16,7 @@ router.post('/', function (req, res, next) {
         }
 
         User.create(userData, function(error, user) {
+            console.log(error + ' ' + user);
             if(error) {
                 return next(error);
             } else {
