@@ -2,12 +2,15 @@ var express = require('express');
 var router = express.Router();
 var User = require('mongoose').model('User');
 
-router.get('/signup', function(req, res, next) {
+router.get('/', function(req, res, next) {
     res.render('signup', { title: 'Sign Up'})
 });
 
-router.post('/signup', function (req, res, next) {
+router.post('/', function (req, res, next) {
+    console.log('POST received');
     if (req.body.email && req.body.username && req.body.password && req.body.passwordConf) {
+        console.log(req.body.email);
+
         var userData = {
             email: req.body.email,
             username: req.body.username,
