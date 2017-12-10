@@ -21,6 +21,7 @@ server.listen(8081);
 // connect to db
 mongoose.connect('mongodb://localhost/CForce');
 const db = mongoose.connection;
+console.log(db);
 //sort out mongoose models
 require('./models/user');
 
