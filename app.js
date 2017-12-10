@@ -19,11 +19,9 @@ global.io = require('socket.io')(server);
 server.listen(8081);
 
 // connect to db
-mongoose.connect('mongodb://localhost:27017/CForce', function(err) {
-    if (err) throw err;
-    console.log('Successfully connected to MongoDB');
-});
+mongoose.connect('mongodb://localhost:27017/CForce');
 const db = mongoose.connection;
+console.log(mongoose.connection.readyState);
 
 //sort out mongoose models
 require('./models/user');
