@@ -9,6 +9,18 @@ function ChatObj() {
         //data.message = the text they sent
         console.log(data.from + ' ' + data.message);
 
+        const markup = `
+        <img class="chat-avatar" src="/images/MW.svg"></img>
+        <div style="display: flex; flex-direction: column;">
+            <p class="chat-text chat-username">${data.from}</p>
+            <p class="chat-text">${data.message}</p>
+        </div>
+        `;
+        const msg = document.createElement('li');
+        msg.className = 'chat-message';
+        msg.innerHTML = markup;
+        this.content.appendChild(msg);
+
         this.box.scrollTo(0, this.box.scrollHeight);
     }
     this.messageSend = function(msg) {
