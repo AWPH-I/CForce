@@ -30,19 +30,16 @@ global.io.on('connection', function(socket){
             return;
         }
 
-        var user;
-
-        User.findOne({_id: socket.handshake.session.userId}, function(err, foundUser) {
+        User.findOne({_id: socket.handshake.session.userId}, function(err, user) {
             if(err) {
                 //Invalid userId was given - add 1 to cooldown and blacklist their IP soon
                 return next(err);
             } else {
-                user = foundUser;
+                msg = sanitiseMessage(msg);
+                console.log(user.username + ': ' + msg);
+                io.emit('chat-receive', {from: user.username, message: msg});
             }
         });
-        msg = sanitiseMessage(msg);
-        console.log(user + ': ' + msg);
-        io.emit('chat-receive', {from: user.username, message: msg});
     });
 });
 
