@@ -13,7 +13,11 @@ function RouletteObj() {
 }
 
 function sanitiseMessage(text) {
-    return (String(text)).substring(0,255) + '...';
+    text = (String(text));
+    if(text.length > 256) {
+        text = text.substring(0,255) + '...';
+    }
+    return text;
 }
 
 /* GET home page. */
@@ -23,7 +27,7 @@ router.get('/', function(req, res, next) {
 
 global.io.on('connection', function(socket){
     var address = socket.handshake.address;
-    
+
     //Server receiving a chat message
     socket.on('chat-send', function(msg){
         if(!socket.handshake.session.userId) {
