@@ -49,7 +49,7 @@ var sess = session({
         host: 'localhost',
         port: 27017,
         db: 'CForce',
-        collection: 'sessions' 
+        collection: 'sessions',
         expire: 86400
     })
 });
