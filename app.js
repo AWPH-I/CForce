@@ -46,7 +46,7 @@ var testUser = new User({
 
 testUser.save(function(err) {
     if (err) throw err;
-}
+});
 //Testing
 
 
