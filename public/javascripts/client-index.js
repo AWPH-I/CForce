@@ -26,13 +26,20 @@ function ChatObj() {
         this.box.scrollTo(0, this.box.scrollHeight);
     }
     this.messageSend = function() {
-        socket.emit('chat-send', input.value);
+        socket.emit('chat-send', this.input.value);
     }
 }
 
 $(document).ready(function() {
     //init chat on doc ready
     Chat = new ChatObj();
+});
+
+//Cheeky shortcut
+$("#chat-input").keyup(function(event) {
+    if (event.keyCode === 13) {
+        $("#chat-button").click();
+    }
 });
 
 socket.on('chat-receive', function (data) {
