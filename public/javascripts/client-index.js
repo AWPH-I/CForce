@@ -7,10 +7,6 @@ function ChatObj() {
     this.input = document.getElementById('chat-input');
 
     this.messageReceive = function(data) {
-        //data.from = senders username
-        //data.message = the text they sent
-        console.log(data.from + ' ' + data.message);
-
         const markup = `
         <img class="chat-avatar" src="/images/MW.svg"></img>
         <div style="display: flex; flex-direction: column;">
@@ -32,7 +28,6 @@ function ChatObj() {
 }
 
 $(document).ready(function() {
-    //init chat on doc ready
     Chat = new ChatObj();
 });
 
