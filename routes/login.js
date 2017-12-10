@@ -2,11 +2,11 @@ var express = require('express');
 var router = express.Router();
 var User = require('mongoose').model('User');
 
-router.get('/', function(req, res, next) {
+router.get('/login', function(req, res, next) {
     res.render('login', { title: 'Login'})
 });
 
-router.post('/', function (req, res, next) {
+router.post('/login', function (req, res, next) {
     if (req.body.email && req.body.password) {
         User.authenticate(req.body.email, req.body.password, function(error, user) {
             console.log(error + ' ' + user);
