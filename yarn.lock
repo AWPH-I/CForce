@@ -299,6 +299,13 @@ connect-flash@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/connect-flash/-/connect-flash-0.1.1.tgz#d8630f26d95a7f851f9956b1e8cc6732f3b6aa30"
 
+connect-mongostore@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/connect-mongostore/-/connect-mongostore-0.1.4.tgz#f5df49b51160b65dd8b54acc30702ccbc716ab89"
+  dependencies:
+    lodash "~2.4"
+    mongodb "~1.4"
+
 console-control-strings@^1.0.0, console-control-strings@~1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/console-control-strings/-/console-control-strings-1.1.0.tgz#3d7cf4464db6446ea644bf4b39507f9851008e8e"
@@ -832,6 +839,10 @@ lazy-cache@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/lazy-cache/-/lazy-cache-1.0.4.tgz#a1d78fc3a50474cb80845d3b3b6e1da49a446e8e"
 
+lodash@~2.4:
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-2.4.2.tgz#fadd834b9683073da179b3eae6d9c0d15053f73e"
+
 longest@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/longest/-/longest-1.0.1.tgz#30a0b2da38f73770e8294a0d22e6625ed77d0097"
@@ -903,6 +914,15 @@ mongodb@^3.0.0-rc0:
   resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-3.0.0-rc0.tgz#8d87c762978048b2c6a100a9034371350606b846"
   dependencies:
     mongodb-core "3.0.0-rc0"
+
+mongodb@~1.4:
+  version "1.4.40"
+  resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-1.4.40.tgz#cfd80b74fdf0fa053f2ccfb5f49c47ca32a38efb"
+  dependencies:
+    bson "~0.2"
+  optionalDependencies:
+    kerberos "0.0.11"
+    readable-stream latest
 
 mongoose@~3.8.22:
   version "3.8.40"
