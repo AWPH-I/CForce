@@ -19,7 +19,7 @@ global.io = require('socket.io')(server);
 server.listen(8081);
 
 // connect to db
-mongoose.connect('mongodb://localhost:27017/CForce');
+mongoose.connect('mongodb://localhost/CForce');
 const db = mongoose.connection;
 
 //sort out mongoose models
