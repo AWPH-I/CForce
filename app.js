@@ -19,14 +19,17 @@ global.io = require('socket.io')(server);
 server.listen(8081);
 
 // connect to db
-mongoose.connect('mongodb://localhost/CForce');
+const db = mongoose.createConnection('mongodb://127.0.0.1/CForce');
 
 //sort out mongoose models
 require('./models/user');
 
-//Ref 
-const db = mongoose.connection;
 console.log(db);
+
+//Error listener
+mongoose.connection.on('error', function(err) {
+    console.error('MongoDB error: %s', err);
+});
 
 
 // view engine setup
