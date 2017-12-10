@@ -8,7 +8,6 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var sharedsession = require("express-socket.io-session");
 
-var MongoStore = require('connect-mongostore')(session);
 var mongoose = require('mongoose');
 
 var app = express();
@@ -44,8 +43,14 @@ var sess = session({
     secret: 'seOOOSPAPSDwag167321320sdmSKRRRgucciGAngGG,',
     resave: true,
     saveUninitialized: false,
-    store: new MongoStore({
-        mongooseConnection: db
+    store: new (require('express-sessions'))({
+        storage: 'mongodb',
+        instance: mongoose, 
+        host: 'localhost',
+        port: 27017,
+        db: 'CForce', 
+        collection: 'sessions',
+        expire: 86400
     })
 });
 
