@@ -21,32 +21,9 @@ server.listen(8081);
 // connect to db
 mongoose.connect('mongodb://localhost:27017/CForce');
 const db = mongoose.connection;
-console.log(mongoose.connection.readyState);
 
 //sort out mongoose models
 require('./models/user');
-
-//Error listener
-mongoose.connection.on('error', function(err) {
-    console.error('MongoDB error: %s', err);
-});
-
-
-//Testing
-var User = mongoose.model('user');
-
-var testUser = new User({
-    email: 'a@n.co',
-    username: 'x',
-    password: 'xx',
-    passwordConf: 'xx'
-});
-
-testUser.save(function(err) {
-    if (err) throw err;
-});
-//Testing
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
