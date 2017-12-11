@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var User = require('mongoose').model('user');
 
 const Roulette = new RouletteObj();
 
@@ -26,11 +25,19 @@ router.get('/', function(req, res, next) {
 });
 
 global.io.on('connection', function(socket){
+    console.log('Connected');
     var address = socket.handshake.address;
+    User.validateId(socket.handshake.session.userId, function(error, user) {
+        if(error || !user) {
+            socket.isLoggedIn = false;
+        } else {
+            socket.isLoggedIn = true;
+        }
+    });
 
     //Server receiving a chat message
     socket.on('chat-send', function(msg){
-        if(true) {
+        if(socket.isLoggedIn) {
             msg = sanitiseMessage(msg);
             if(msg == '') return;
             io.emit('chat-receive', {from: user.username, message: msg});
