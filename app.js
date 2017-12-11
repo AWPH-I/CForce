@@ -58,7 +58,21 @@ app.use(sess);
 
 global.io.use(sharedsession(sess, {
     autoSave:true
-})); 
+}));
+
+// check logged in on every page req
+app.use(function(req, res, next) {
+    User.validateId(req.session.userId, function(err, user) {
+        if(error || !user) {
+            var err = new Error('Wrong email or password.');
+            err.status = 401;
+            return next(err);
+        } else {
+            req.isLoggedIn = true;
+        }
+    });
+});
+
 
 // routes
 app.use('/', require('./routes/index'));

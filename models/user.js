@@ -48,8 +48,16 @@ UserSchema.statics.authenticate = function(email, password, callback) {
 }
 
 UserSchema.statics.validateId = function(id) {
-    User.findOne({ _id: id }).exec(function (err, user) {
-        return (err || !user);
+    User.findOne({ _id: id }).exec(function (err, user, callback) {
+        if (err) {
+            return callback(err);
+        } else if (!user) {
+            var err = new Error('User not found.');
+            err.status = 401;
+            return callback(err);
+        } else {
+            return callback();
+        }
     });
 }
 

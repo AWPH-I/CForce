@@ -22,7 +22,7 @@ function sanitiseMessage(text) {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('index', { title: 'CForce Roulette', isLoggedIn: User.validateId(req.session.userId)})
+    res.render('index', { title: 'CForce Roulette', isLoggedIn: req.isLoggedIn });
 });
 
 global.io.on('connection', function(socket){
@@ -30,7 +30,7 @@ global.io.on('connection', function(socket){
 
     //Server receiving a chat message
     socket.on('chat-send', function(msg){
-        if(User.validateId(socket.handshake.session.userId)) {
+        if(true) {
             msg = sanitiseMessage(msg);
             if(msg == '') return;
             io.emit('chat-receive', {from: user.username, message: msg});
