@@ -5,7 +5,7 @@ function ChatObj() {
     this.box = document.getElementById('chat-box');
     this.content = document.getElementById('chat-content');
     this.input = document.getElementById('chat-input');
-
+    
     this.messageReceive = function(data) {
         const markup = `
         <img class="chat-avatar" src="/images/MW.svg"></img>
@@ -21,6 +21,7 @@ function ChatObj() {
 
         this.box.scrollTo(0, this.box.scrollHeight);
     }
+    
     this.messageSend = function() {
         socket.emit('chat-send', this.input.value);
         this.input.value = '';

@@ -10,11 +10,12 @@ block scripts
 block content
     .container-fluid
         .row
-            .col-md-9
+            .col-xl-9
 
-            .col-md-3
+            .col-xl-3
                 #chat-box(style='margin-left: auto; margin-right: auto;')
                     ul#chat-content
                 .input-group(style='width: 100%;')
                     input.form-control(type='text', id='chat-input', maxlength='256', onkeydown='if(event.keyCode == 13) $("#chat-button").click();')
-                    button.btn.btn-primary#chat-button(type='button', onClick='Chat.messageSend()') :D
+                    button.btn.btn-primary#chat-button(type='button', onClick='Chat.messageSend()') 
+                        i.fa.fa-paper-plane(aria-hidden='true', style='margin-left: -4px;')

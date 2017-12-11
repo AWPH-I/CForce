@@ -16,7 +16,10 @@ var UserSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
+    required: true
+  }, balance: {
+    type: Number,
+    required: true
   }
 });
 
@@ -41,6 +44,16 @@ UserSchema.statics.authenticate = function(email, password, callback) {
                 return callback();
             }
         })
+    });
+}
+
+UserSchema.statics.validateId = function(id) {
+    User.findOne({ _id: id }).exec(function (err, user) {
+        if (err || !user) {
+            return false;
+        } else {
+            return true;
+        }
     });
 }
 

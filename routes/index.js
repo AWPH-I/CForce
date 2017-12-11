@@ -22,7 +22,7 @@ function sanitiseMessage(text) {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('index', { title: 'CForce Roulette'})
+    res.render('index', { title: 'CForce Roulette', isLoggedIn: User.validateId(req.session.userId)})
 });
 
 global.io.on('connection', function(socket){
@@ -31,20 +31,17 @@ global.io.on('connection', function(socket){
     //Server receiving a chat message
     socket.on('chat-send', function(msg){
         if(!socket.handshake.session.userId) {
-            //Add 1 to the cooldown and blacklist their IP soon
             return;
         }
 
-        User.findOne({_id: socket.handshake.session.userId}, function(err, user) {
-            if(err) {
-                //Invalid userId was given - add 1 to cooldown and blacklist their IP soon
-                return next(err);
-            } else {
-                msg = sanitiseMessage(msg);
-                if(msg == '') return;
-                io.emit('chat-receive', {from: user.username, message: msg});
-            }
-        });
+        if(User.validateId(socket.handshake.session.userId)) {
+            msg = sanitiseMessage(msg);
+            if(msg == '') return;
+            io.emit('chat-receive', {from: user.username, message: msg});
+        } else {
+            socket.emit('chat-receive', {from: 'Server', message: 'Please create an account and login to chat!'});
+        }
+
     });
 });
 
