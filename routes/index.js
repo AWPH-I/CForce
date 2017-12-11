@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var User = require('mongoose').model('user');
 
 const Roulette = new RouletteObj();
 
