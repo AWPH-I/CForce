@@ -62,7 +62,7 @@ global.io.use(sharedsession(sess, {
 
 global.io.on('connection', function(socket){
     console.log('Connected');
-    User.findOne({ _id: id }).exec(function(err, user) {
+    User.findOne({ _id: socket.handshake.session.userId }).exec(function(err, user) {
         if(err || !user) {
             socket.isLoggedIn = false;
         } else {
