@@ -56,7 +56,7 @@ UserSchema.statics.validateId = function(id) {
             err.status = 401;
             return callback(err);
         } else {
-            return callback();
+            return callback(null, user);
         }
     });
 }
