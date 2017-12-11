@@ -63,7 +63,7 @@ global.io.use(sharedsession(sess, {
 var User = mongoose.model('user');
 // check logged in on every page req
 app.use(function(req, res, next) {
-    User.validateId(req.session.userId, function(err, user) {
+    User.validateId(req.session.userId, function(error, user) {
         if(error || !user) {
             var err = new Error('Wrong email or password.');
             err.status = 401;
