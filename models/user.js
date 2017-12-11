@@ -47,8 +47,8 @@ UserSchema.statics.authenticate = function(email, password, callback) {
     });
 }
 
-UserSchema.statics.validateId = function(id) {
-    User.findOne({ _id: id }).exec(function (err, user, callback) {
+UserSchema.statics.validateId = function(id, callback) {
+    User.findOne({ _id: id }).exec(function (err, user) {
         if (err) {
             return callback(err);
         } else if (!user) {
