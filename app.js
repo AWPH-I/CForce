@@ -70,6 +70,7 @@ app.use(function(req, res, next) {
             return next(err);
         } else {
             req.isLoggedIn = true;
+            next();
         }
     });
 });
