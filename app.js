@@ -60,6 +60,7 @@ global.io.use(sharedsession(sess, {
     autoSave:true
 }));
 
+var User = mongoose.model('user');
 // check logged in on every page req
 app.use(function(req, res, next) {
     User.validateId(req.session.userId, function(err, user) {
