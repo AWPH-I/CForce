@@ -49,6 +49,7 @@ UserSchema.statics.authenticate = function(email, password, callback) {
 
 UserSchema.statics.validateId = function(id) {
     User.findOne({ _id: id }).exec(function (err, user) {
+        console.log(err + ' ' + user);
         if (err || !user) {
             return false;
         } else {

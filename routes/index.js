@@ -30,10 +30,6 @@ global.io.on('connection', function(socket){
 
     //Server receiving a chat message
     socket.on('chat-send', function(msg){
-        if(!socket.handshake.session.userId) {
-            return;
-        }
-
         if(User.validateId(socket.handshake.session.userId)) {
             msg = sanitiseMessage(msg);
             if(msg == '') return;
