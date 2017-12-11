@@ -60,6 +60,18 @@ global.io.use(sharedsession(sess, {
     autoSave:true
 }));
 
+global.io.on('connection', function(socket){
+    console.log('Connected');
+    User.findOne({ _id: id }).exec(function(err, user) {
+        if(err || !user) {
+            socket.isLoggedIn = false;
+        } else {
+            socket.isLoggedIn = true;
+            socket.username = user.username;
+        }
+    });
+});
+
 var User = mongoose.model('user');
 // check logged in on every page req
 app.use(function(req, res, next) {

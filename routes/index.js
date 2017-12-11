@@ -26,22 +26,12 @@ router.get('/', function(req, res, next) {
 });
 
 global.io.on('connection', function(socket){
-    console.log('Connected');
-    var address = socket.handshake.address;
-    User.validateId(socket.handshake.session.userId, function(error, user) {
-        if(error || !user) {
-            socket.isLoggedIn = false;
-        } else {
-            socket.isLoggedIn = true;
-        }
-    });
-
     //Server receiving a chat message
     socket.on('chat-send', function(msg){
         if(socket.isLoggedIn) {
             msg = sanitiseMessage(msg);
             if(msg == '') return;
-            io.emit('chat-receive', {from: user.username, message: msg});
+            io.emit('chat-receive', {from: socket.username, message: msg});
         } else {
             socket.emit('chat-receive', {from: 'Server', message: 'Please create an account and login to chat!'});
         }
