@@ -77,9 +77,8 @@ var User = mongoose.model('user');
 app.use(function(req, res, next) {
     User.validateId(req.session.userId, function(error, user) {
         if(error || !user) {
-            var err = new Error('Wrong email or password.');
-            err.status = 401;
-            return next(err);
+            req.isLoggedIn = false;
+            next();
         } else {
             req.isLoggedIn = true;
             next();
