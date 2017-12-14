@@ -19,7 +19,7 @@ router.post('/', function (req, res, next) {
             }
         });
     } else {
-        res.send(function(){ error({title: 'Empty fields!', body:'Please fill in all required information to login.', type:'danger'}) });
+        res.render('login', {title: 'Login', isLoggedIn: req.isLoggedIn});
     }
 });
 
