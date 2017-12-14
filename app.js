@@ -71,6 +71,7 @@ io.on('connection', function(socket){
             socket.username = user.username;
         }
     });
+    socket.handshake.session.save();
 });
 
 // check logged in on every page req
