@@ -62,6 +62,7 @@ io.use(sharedsession(sess, {
 
 io.on('connection', function(socket){
     socket.handshake.session.socketId = socket.id;
+    console.log('Connected, set socketId of sess to ' +  socket.handshake.session.socketId);
     User.findOne({ _id: socket.handshake.session.userId }).exec(function(err, user) {
         if(err || !user) {
             socket.isLoggedIn = false;
