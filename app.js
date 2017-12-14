@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var session = require('express-session');
-var sharedsession = require("express-socket.io-session");
+var sharedsession = require('socket.io-express-session');
 
 var mongoose = require('mongoose');
 
@@ -55,7 +55,7 @@ var sess = session({
 
 app.use(sess);
 
-io.use(sharedsession(sess), {autoSave: true});
+io.use(sharedsession(sess));
 
 var User = mongoose.model('user');
 
@@ -70,6 +70,8 @@ io.on('connection', function(socket){
             socket.username = user.username;
         }
     });
+
+    socket.handshake.session.save();
 });
 
 server.listen(8081);
