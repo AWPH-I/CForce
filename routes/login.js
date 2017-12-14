@@ -19,7 +19,8 @@ router.post('/', function (req, res, next) {
             }
         });
     } else {
-        console.log(req.session.sock.id);
+        console.log('req id: ' + req.session.id)
+        console.log('sock id: ' + req.session.sock.id);
         req.session.sock.emit('error-receive', {title:'All field are required.', body:'You must provide all necessary info to login.', type:'danger'})
     }
 });
