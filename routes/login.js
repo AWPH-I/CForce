@@ -19,8 +19,7 @@ router.post('/', function (req, res, next) {
             }
         });
     } else {
-        res.type('.js');
-        res.send("error({title: 'Empty fields!', body:'Please fill in all required information to login.', type:'danger'})");
+        res.send(function(){ error({title: 'Empty fields!', body:'Please fill in all required information to login.', type:'danger'}) });
     }
 });
 
