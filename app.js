@@ -55,7 +55,7 @@ var sess = session({
 
 app.use(sess);
 
-io.use(sharedsession(sess));
+io.use(sharedsession(sess), {autoSave: true});
 
 var User = mongoose.model('user');
 
@@ -70,7 +70,6 @@ io.on('connection', function(socket){
             socket.username = user.username;
         }
     });
-    socket.handshake.session.save();
 });
 
 server.listen(8081);
