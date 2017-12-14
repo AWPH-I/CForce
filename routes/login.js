@@ -3,7 +3,9 @@ var router = express.Router();
 var User = require('mongoose').model('user');
 
 router.get('/', function(req, res, next) {
-    res.render('login', {title: 'Login', isLoggedIn: req.isLoggedIn})
+    res.render('login', {title: 'Login', isLoggedIn: req.isLoggedIn});
+    io.to(req.session.sock).emit('error-receive', {title: 'Empty fields!', body:'Please fill in all required information to login.', type:'danger'});
+    console.log('x');
 });
 
 router.post('/', function (req, res, next) {
