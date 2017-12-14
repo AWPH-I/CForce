@@ -25,4 +25,18 @@ router.get('/', function(req, res, next) {
     res.render('index', { title: 'CForce Roulette', isLoggedIn: req.isLoggedIn });
 });
 
+io.on('connection', function(socket){
+    //Server receiving a chat message
+    socket.on('chat-send', function(msg){
+        if(socket.isLoggedIn) {
+            msg = sanitiseMessage(msg);
+            if(msg == '') return;
+            io.emit('chat-receive', {from: socket.username, message: msg});
+        } else {
+            socket.emit('error-receive', {title: 'Not logged in!', body: 'Please create an account and login to chat.', type:'warning'});
+        }
+
+    });
+});
+
 module.exports = router;
