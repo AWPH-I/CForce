@@ -25,7 +25,7 @@ router.get('/', function(req, res, next) {
     res.render('index', { title: 'CForce Roulette', isLoggedIn: req.isLoggedIn });
 });
 
-global.io.on('connection', function(socket){
+io.on('connection', function(socket){
     //Server receiving a chat message
     socket.on('chat-send', function(msg){
         if(socket.isLoggedIn) {

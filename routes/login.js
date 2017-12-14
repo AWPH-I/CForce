@@ -19,9 +19,7 @@ router.post('/', function (req, res, next) {
             }
         });
     } else {
-        var err = new Error('All fields required.');
-        err.status = 400;
-        return next(err);
+        io.sockets.connected[req.session.socketId].emit('error-receive', {title:'All field are required.', body:'You must provide all necessary info to login.', type:'danger'})
     }
 });
 
