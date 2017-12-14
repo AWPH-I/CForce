@@ -19,9 +19,7 @@ router.post('/', function (req, res, next) {
             }
         });
     } else {
-        var err = new Error('All fields required.');
-        err.status = 400;
-        return next(err);
+        req.session.sock.emit('error-receive', {title: 'Not logged in!', body:'Please create an account and login to chat.', type:'warning'});
     }
 });
 
