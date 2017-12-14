@@ -15,7 +15,6 @@ var app = express();
 //Create socketIO server
 var server = require('http').Server(app);
 global.io = require('socket.io')(server);
-server.listen(8081);
 
 // connect to db
 mongoose.connect('mongodb://localhost:27017/CForce', function(err) {
@@ -56,7 +55,7 @@ var sess = session({
 
 app.use(sess);
 
-io.use(sharedsession(sess, { autoSave:true }));
+io.use(sharedsession(sess));
 
 var User = mongoose.model('user');
 
@@ -73,6 +72,8 @@ io.on('connection', function(socket){
     });
     socket.handshake.session.save();
 });
+
+server.listen(8081);
 
 // check logged in on every page req
 app.use(function(req, res, next) {
