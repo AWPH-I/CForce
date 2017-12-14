@@ -47,19 +47,17 @@ html, body {
     flex: 1;
 }
 
-.alert-wrapper {
+.alert-card {
     width: 100%; 
     position: fixed; 
-    bottom: 2%; 
-    text-align: center; 
-    z-index: 5000;
-}
+    bottom: 2%;
+    left: 25%;
+    text-align: center;
 
-.alert-card {
-    margin: auto; 
     word-break: 
     break-word; 
     max-width: 50vw;
+    z-index: 5000;
 }
 
 .alert-close {
