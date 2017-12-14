@@ -19,8 +19,8 @@ router.post('/', function (req, res, next) {
             }
         });
     } else {
-        console.log(req.session.sock);
-        //.emit('error-receive', {title: 'Not logged in!', body:'Please create an account and login to chat.', type:'warning'});
+        io.sockets.connected[req.session.sock].emit('error-receive', {title: 'Empty fields!', body:'Please fill in all required information to login.', type:'danger'})
+        return next();
     }
 });
 
