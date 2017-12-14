@@ -19,7 +19,7 @@ var UserSchema = new mongoose.Schema({
     required: true
   }, balance: {
     type: Number,
-    required: true
+    default: 0
   }
 });
 
@@ -63,6 +63,7 @@ UserSchema.statics.validateId = function(id, callback) {
 
 UserSchema.pre('save', function(next) {
     var user = this;
+    //Hash the password
     bcrypt.hash(user.password, 10, function(err, hash) {
         if (err) {
           return next(err);

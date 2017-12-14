@@ -1,0 +1,74 @@
+:root {
+    /* Colours preface with a --cl-NAME, named by http://www.color-blindness.com/color-name-hue/ and aWpH--*/
+    --cl-solitude: #ECEFF1;
+    --cl-pattens-blue: #F7FBFC;
+    --cl-carbon: rgba(0,0,0,0.1);
+    --cl-off-white: #fdfdfd;
+    --cl-virgil-abloh: hsla(0, 0%, 98%, 1);
+}
+
+body {
+    background-color: var(--cl-virgil-abloh);
+}
+
+html, body {
+    height: 100%;
+}
+
+.content-box {
+    width: 100%;
+
+    padding: 20px;
+    margin: 20px;
+
+    overflow-y: auto;
+
+    border: 1px solid transparent;
+    border-radius: 25px;
+    border-color: var(--cl-carbon);
+
+    background-color: var(--cl-off-white);
+
+    margin-left: auto; 
+    margin-right: auto;
+}
+
+.fill {
+    width: 100%;
+    height: 100%;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-fill {
+    flex: 1;
+}
+
+.alert-wrapper {
+    width: 100%; 
+    position: fixed; 
+    bottom: 2%; 
+    text-align: center; 
+    z-index: 5000;
+}
+
+.alert-card {
+    margin: auto; 
+    word-break: 
+    break-word; 
+    max-width: 50vw;
+}
+
+.alert-close {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    opacity: 0.5;
+}
+
+.alert-close:hover {
+    opacity: 1;
+}

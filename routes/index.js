@@ -33,7 +33,7 @@ global.io.on('connection', function(socket){
             if(msg == '') return;
             io.emit('chat-receive', {from: socket.username, message: msg});
         } else {
-            socket.emit('chat-receive', {from: 'Server', message: 'Please create an account and login to chat!'});
+            socket.emit('error-receive', {title: 'Not logged in!', body: 'Please create an account and login to chat.', type:'warning'});
         }
 
     });

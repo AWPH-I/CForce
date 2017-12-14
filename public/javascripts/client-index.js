@@ -30,6 +30,10 @@ function ChatObj() {
 
 $(document).ready(function() {
     Chat = new ChatObj();
+
+    $('.bet-btn').click(function() {
+        socket.emit('bet-send', this.getAttribute('bet'), 5);
+    });
 });
 
 socket.on('chat-receive', function (data) {

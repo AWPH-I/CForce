@@ -78,7 +78,7 @@ app.use(function(req, res, next) {
     User.validateId(req.session.userId, function(error, user) {
         if(error || !user) {
             req.isLoggedIn = false;
-            next();
+            next(); 
         } else {
             req.isLoggedIn = true;
             next();
