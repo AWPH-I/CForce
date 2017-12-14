@@ -19,7 +19,7 @@ router.post('/', function (req, res, next) {
             }
         });
     } else {
-        io.sockets.connected[req.session.sock].emit('error-receive', {title: 'Empty fields!', body:'Please fill in all required information to login.', type:'danger'});
+        io.to(req.session.sock).emit('error-receive', {title: 'Empty fields!', body:'Please fill in all required information to login.', type:'danger'});
     }
 });
 
