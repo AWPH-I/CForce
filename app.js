@@ -61,9 +61,9 @@ io.use(sharedsession(sess, {
 }));
 
 io.on('connection', function(socket){
-    socket.handshake.session.socketId = socket.id;
-    console.log('Connected, set socketId of sess to ' +  socket.handshake.session.socketId);
-    console.log(io.sockets.connected);
+    socket.handshake.session.socket = socket;
+    console.log('New conn: ' + socket.handshake.session.socket);
+    
     User.findOne({ _id: socket.handshake.session.userId }).exec(function(err, user) {
         if(err || !user) {
             socket.isLoggedIn = false;
@@ -71,6 +71,17 @@ io.on('connection', function(socket){
             socket.isLoggedIn = true;
             socket.username = user.username;
         }
+    });
+
+    socket.on('chat-send', function(msg){
+        if(socket.isLoggedIn) {
+            msg = sanitiseMessage(msg);
+            if(msg == '') return;
+            io.emit('chat-receive', {from: socket.username, message: msg});
+        } else {
+            socket.emit('error-receive', {title: 'Not logged in!', body: 'Please create an account and login to chat.', type:'warning'});
+        }
+
     });
 });
 
