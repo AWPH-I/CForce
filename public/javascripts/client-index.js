@@ -1,4 +1,3 @@
-var socket = io.connect(window.location.href);
 var Chat;
 
 function ChatObj() {
