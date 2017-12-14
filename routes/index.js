@@ -27,6 +27,7 @@ router.get('/', function(req, res, next) {
 
 io.on('connection', function(socket){
     //Server receiving a chat message
+    console.log('Conn: ' + socket.id);
     socket.on('chat-send', function(msg){
         if(socket.isLoggedIn) {
             msg = sanitiseMessage(msg);
