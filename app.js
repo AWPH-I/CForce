@@ -60,7 +60,7 @@ io.use(sharedsession(sess));
 var User = mongoose.model('user');
 
 io.on('connection', function(socket){
-    socket.handshake.session.sock = socket;
+    socket.handshake.session.sock = socket.id;
 
     User.findOne({ _id: socket.handshake.session.userId }).exec(function(err, user) {
         if(err || !user) {

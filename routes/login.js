@@ -19,7 +19,8 @@ router.post('/', function (req, res, next) {
             }
         });
     } else {
-        req.session.sock.emit('error-receive', {title: 'Not logged in!', body:'Please create an account and login to chat.', type:'warning'});
+        console.log(req.session.sock);
+        //.emit('error-receive', {title: 'Not logged in!', body:'Please create an account and login to chat.', type:'warning'});
     }
 });
 
