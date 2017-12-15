@@ -14,7 +14,7 @@ router.post('/', function (req, res, next) {
             } else {
                 req.session.userId = user._id;
                 console.log('redir');
-                res.redirect('/profile');
+                res.redirect(307, '/profile');
             }
         });
     } else {
