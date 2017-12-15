@@ -3,6 +3,10 @@ function handlePOST(url, params) {
         if(data.err) {
             throwErr(data.err);
         }
+
+        if(data.redirect) {
+            window.location = data.redirect;
+        }
     });
 }
 

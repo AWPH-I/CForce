@@ -21,7 +21,7 @@ router.post('/', function (req, res, next) {
                     res.json({err:{title:'Received error #M0UC!', body:'Please report this to aWpH--.', type:danger}});
                 } else {
                     req.session.userId = user._id;
-                    res.redirect('/profile');
+                    res.json({redirect:'/profile'});
                 }
             });
         } else {
