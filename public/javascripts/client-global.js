@@ -13,7 +13,7 @@ $.fn.extend({
     }
 });
 
-function error(data) { 
+function throwErr(data) { 
     const err = document.createElement('div');
     err.className = 'animated bounceIn alert-card alert alert-' + data.type;
     err.innerHTML = '<b>' + data.title + '</b><br>' + data.body;
@@ -29,11 +29,12 @@ function error(data) {
 
     $(err).append(close);
     $('body').append(err);
-}
 
-socket.on('error-receive', function (data) {
-    error(data);
     if($('.alert-card').length > 3) {
         $('.alert-card')[0].remove();
     }
+}
+
+socket.on('error-receive', function (data) {
+    throwErr(data);
 });

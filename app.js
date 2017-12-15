@@ -69,7 +69,7 @@ io.on('connection', function(socket){
         }
     });
 });
-
+    
 server.listen(8081);
 
 // check logged in on every page req

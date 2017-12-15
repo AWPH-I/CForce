@@ -10,16 +10,14 @@ router.post('/', function (req, res, next) {
     if (req.body.email && req.body.password) {
         User.authenticate(req.body.email, req.body.password, function(error, user) {
             if(error || !user) {
-                var err = new Error('Wrong email or password.');
-                err.status = 401;
-                return next(err);
+                res.json({ err:{title: 'Invalid credentials!', body:'The details you have provided are invalid.', type:'danger' } });
             } else {
                 req.session.userId = user._id;
                 return res.redirect('/profile');
             }
         });
     } else {
-        res.render('login', {title: 'Login', isLoggedIn: req.isLoggedIn});
+        res.json({ err:{title: 'Empty fields!', body:'Please provide all necessary information to login.', type:'warning'} });
     }
 });
 

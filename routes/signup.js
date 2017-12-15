@@ -7,7 +7,6 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function (req, res, next) {
-    console.log('POST received');
     if (req.body.email && req.body.username && req.body.password && req.body.passwordConf) {
         console.log(require('mongoose').connection.readyState);
         if(req.body.passwordConf == req.body.password) {
@@ -18,23 +17,18 @@ router.post('/', function (req, res, next) {
             }
 
             User.create(userData, function(error, user) {
-                console.log(error + ' ' + user);
                 if(error) {
-                    return next(error);
+                    res.json({err:{title:'Received error #M0UC!', body:'Please report this to aWpH--.', type:danger}});
                 } else {
                     req.session.userId = user._id;
-                    return res.redirect('/profile');
+                    res.redirect('/profile');
                 }
             });
         } else {
-            var err = new Error('Passwords do not match.');
-            err.status = 400;
-            return next(err);   
+            res.json({err:{title:'Passwords don\'t match!', body:'The passwords you have entered are not the same.', type:'warning'}});  
         }
     } else {
-        var err = new Error('All fields required.');
-        err.status = 400;
-        return next(err);
+        res.json({ err:{title: 'Empty fields!', body:'Please provide all necessary information to login.', type:'warning'} });
     }
 });
 
