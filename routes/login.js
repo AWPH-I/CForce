@@ -13,6 +13,7 @@ router.post('/', function (req, res, next) {
                 res.json({ err:{title: 'Invalid credentials!', body:'The details you have provided are invalid.', type:'danger' } });
             } else {
                 req.session.userId = user._id;
+                console.log('redir');
                 res.redirect('/profile');
             }
         });
