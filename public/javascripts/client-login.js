@@ -18,8 +18,6 @@ function serializeForm(form) {
 }
 
 $('form').submit(function(event) {
-    console.log($(this));
-    console.log(serializeForm(this));
     event.preventDefault();
     handlePOST($(this).attr('action'), serializeForm(this));
 });
