@@ -52,7 +52,7 @@ io.on('connection', function(socket){
             return;
         };
 
-        User.getBalance(socket.handshake.session.userId, function(error, balance) {
+        User.getBalance(socket.handshake.session.userId, function(err, balance) {
             if(err || !balance) {
                 socket.emit('error-receive', {title:'Received error #BGE4!', body:'Please report this to aWpH--.', type:'danger'});
                 return;
