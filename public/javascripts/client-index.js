@@ -17,14 +17,14 @@ $(document).ready(function() {
         const msg = document.createElement('li');
         msg.className = 'chat-message';
         msg.innerHTML = markup;
-        Chat.content.appendChild(msg);
+        Chat.content.append(msg);
 
-        Chat.box.scrollTo(0, Chat.box.scrollHeight);
+        Chat.box.scroll(0, Chat.box.scrollHeight);
     }
 
     Chat.messageSend = function() {
-        socket.emit('chat-send', Chat.input.value);
-        Chat.input.value = '';
+        socket.emit('chat-send', Chat.input.val());
+        Chat.input.val('');
     }
 });
 
