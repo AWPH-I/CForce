@@ -47,7 +47,7 @@ io.on('connection', function(socket){
             return;
         }
 
-        if(data.bet != 'red' || data.bet != 'green' || data.bet != 'black ') {
+        if(data.bet !== 'red' && data.bet !== 'green' && data.bet !== 'black ') {
             socket.emit('error-receive', {title:'Invalid bet placed!', body:'Please try again after refreshing the page.', type:'danger'});
             return;
         };
