@@ -77,7 +77,7 @@ server.listen(8081);
 
 app.use(function(req, res, next) {
     User.validateId(req.session.userId, function(err, user) {
-        if(error || !user) {
+        if(err || !user) {
             req.session.isLoggedIn = false;
             next(); 
         } else {
