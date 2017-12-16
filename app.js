@@ -62,7 +62,7 @@ var User = mongoose.model('user');
 
 /* -- These two blocks --  */
 io.on('connection', function(socket){
-    User.validateId(socket.handshake.session.userId, function(error, user) {
+    User.validateId(socket.handshake.session.userId, function(err, user) {
         if(err || !user) {
             socket.handshake.session.isLoggedIn = false;
         } else {
@@ -76,7 +76,7 @@ io.on('connection', function(socket){
 server.listen(8081);
 
 app.use(function(req, res, next) {
-    User.validateId(req.session.userId, function(error, user) {
+    User.validateId(req.session.userId, function(err, user) {
         if(error || !user) {
             req.session.isLoggedIn = false;
             next(); 
