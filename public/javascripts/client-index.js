@@ -1,11 +1,12 @@
-var Chat;
+var Chat = {};
 
-function ChatObj() {
-    this.box = document.getElementById('chat-box');
-    this.content = document.getElementById('chat-content');
-    this.input = document.getElementById('chat-input');
-    
-    this.messageReceive = function(data) {
+
+$(document).ready(function() {
+    Chat.box = $('#chat-box');
+    Chat.content = $('#chat-content');
+    Chat.input = $('#chat-input');
+
+    Chat.messageReceive = function(data) {
         const markup = `
         <img class="chat-avatar" src="/images/MW.svg"></img>
         <div style="display: flex; flex-direction: column;">
@@ -16,23 +17,15 @@ function ChatObj() {
         const msg = document.createElement('li');
         msg.className = 'chat-message';
         msg.innerHTML = markup;
-        this.content.appendChild(msg);
+        Chat.content.appendChild(msg);
 
-        this.box.scrollTo(0, this.box.scrollHeight);
+        Chat.box.scrollTo(0, Chat.box.scrollHeight);
     }
-    
-    this.messageSend = function() {
-        socket.emit('chat-send', this.input.value);
-        this.input.value = '';
+
+    Chat.messageSend = function() {
+        socket.emit('chat-send', Chat.input.value);
+        Chat.input.value = '';
     }
-}
-
-$(document).ready(function() {
-    Chat = new ChatObj();
-
-    $('.bet-btn').click(function() {
-        socket.emit('bet-send', this.getAttribute('bet'), 5);
-    });
 });
 
 socket.on('chat-receive', function (data) {

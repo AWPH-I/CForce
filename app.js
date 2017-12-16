@@ -59,31 +59,34 @@ io.use(sharedsession(sess));
 
 var User = mongoose.model('user');
 
+
+/* -- These two blocks --  */
 io.on('connection', function(socket){
-    User.findOne({ _id: socket.handshake.session.userId }).exec(function(err, user) {
+    User.validateId(socket.handshake.session.userId, function(error, user) {
         if(err || !user) {
-            socket.isLoggedIn = false;
+            socket.handshake.session.isLoggedIn = false;
         } else {
-            socket.isLoggedIn = true;
-            socket.username = user.username;
+            socket.handshake.session.isLoggedIn = true;
+            socket.handshake.session.username = user.username;
         }
+        socket.handshake.session.save();
     });
 });
     
 server.listen(8081);
 
-// check logged in on every page req
 app.use(function(req, res, next) {
     User.validateId(req.session.userId, function(error, user) {
         if(error || !user) {
-            req.isLoggedIn = false;
+            req.session.isLoggedIn = false;
             next(); 
         } else {
-            req.isLoggedIn = true;
+            req.session.isLoggedIn = true;
             next();
         }
     });
 });
+/* */
 
 
 // routes

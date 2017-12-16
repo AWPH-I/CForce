@@ -61,6 +61,20 @@ UserSchema.statics.validateId = function(id, callback) {
     });
 }
 
+UserSchema.statics.getBalance = function(id, callback) {
+    User.findOne({ _id: id }).exec(function (err, user) {
+        if (err) {
+            return callback(err);
+        } else if (!user) {
+            var err = new Error('User not found.');
+            err.status = 401;
+            return callback(err);
+        } else {
+            return callback(null, user.balance);
+        }
+    });
+}
+
 UserSchema.pre('save', function(next) {
     var user = this;
     //Hash the password

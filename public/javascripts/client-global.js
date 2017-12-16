@@ -13,6 +13,11 @@ $.fn.extend({
     }
 });
 
+//Both ranges inclusive
+function randRange(minimum, maximum) {
+    return ((Math.random() * (maximum - minimum + 1) ) << 0) + 1;
+}
+
 function throwErr(data) { 
     const err = document.createElement('div');
     err.className = 'animated bounceIn alert-card alert alert-' + data.type;

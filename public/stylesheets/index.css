@@ -64,15 +64,3 @@
     border-bottom-right-radius: 2rem;
     border-top-right-radius: 2rem;
 }
-
-.bet-btn {
-    text-align: center;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    width: 100%;
-    height: 50px;
-
-    border-radius: 2rem;
-    border: 1px solid transparent;
-    border-color: var(--cl-carbon);
-}

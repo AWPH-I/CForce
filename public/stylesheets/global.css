@@ -16,6 +16,7 @@ html, body {
 }
 
 .content-box {
+    position: relative;
     width: 100%;
 
     padding: 20px;
