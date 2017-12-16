@@ -70,7 +70,15 @@ UserSchema.statics.getBalance = function(id, callback) {
             err.status = 401;
             return callback(err);
         } else {
-            return callback(null, user.balance);
+            if(!user.balance) {
+                user.balance = 0;
+                user.save(function (err, updatedUser) {
+                    if (err) return callback(err);
+                    return callback(null, updatedUser.balance);
+                });
+            } else {
+                return callback(null, user.balance);
+            }
         }
     });
 }
