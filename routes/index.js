@@ -47,18 +47,17 @@ io.on('connection', function(socket){
             return;
         }
 
-        if(data.bet !== 'red' && data.bet !== 'green' && data.bet !== 'black ') {
+        if(data.bet !== 'red' && data.bet !== 'green' && data.bet !== 'black') {
             socket.emit('error-receive', {title:'Invalid bet placed!', body:'Please try again after refreshing the page.', type:'danger'});
             return;
         };
 
         User.getBalance(socket.handshake.session.userId, function(err, balance) {
+            console.log(err + ' ' + balance)
             if(err || !balance) {
                 socket.emit('error-receive', {title:'Received error #BGE4!', body:'Please report this to aWpH--.', type:'danger'});
                 return;
             }
-
-            console.log(balance);
         });
     });
 });
