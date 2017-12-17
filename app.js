@@ -40,6 +40,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 var sess = session({
     secret: 'seOOOSPAPSDwag167321320sdmSKRRRgucciGAngGG,',
+    cookie: {httpOnly: true, secure: true},
     resave: true,
     saveUninitialized: true,
     store: new (require('express-sessions'))({

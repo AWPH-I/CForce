@@ -13,13 +13,17 @@ const port = 8080;
 /**
  * Get port from environment and store in Express.
  */
-app.set('port', port);
+app.set('port', normalizePort(port || 3000));
 
 /**
  * Create HTTPS server.
  */
 
 var server = http.createServer(app);
+
+http.get('*', function(req, res) {  
+    res.redirect('https://' + req.headers.host + req.url);
+});
 
 /**
  * Listen on provided port, on all network interfaces.
