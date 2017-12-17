@@ -6,7 +6,7 @@ Roulette.rollTo = function(num, time = 300, vary = true) {
     Roulette.show();
     const rand = randRange(3,8);
 
-    const real = (64 * (num - Roulette.current) + 960 * rand);
+    var real = (64 * (num - Roulette.current) + 960 * rand);
     const endUp = Number($('#roulette-wheel').css('background-position-x').split('px')[0]) - real;
     const variance = ((Math.floor(Math.random() * (2 - 1 + 1)) + 1 == 1 ? 1 : -1) * Math.random() * 31);
 
