@@ -4,7 +4,7 @@ Roulette.rollTo = function(num, time) {
     Roulette.show();
     const rand = randRange(1,4);
 
-    const duration = rand * 300 * Math.random() * 4;
+    var duration = rand * 300 * Math.random() * 4;
     if(!time) duration = time;
 
     console.log(duration);
