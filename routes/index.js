@@ -3,15 +3,11 @@ var router = express.Router();
 var User = require('mongoose').model('user');
 
 const Roulette = {};
-
 Roulette.lastSpin = {};
-
-Roulette.lastSpin.time = new Date().getTime();
-Roulette.lastSpin.result = 0;
 Roulette.bets = [];
 
 Roulette.spin = function() {
-    Roulette.lastSpin.result = Math.floor(Math.random() * 14);
+    Roulette.lastSpin.result = ((Math.random() * (14 - 0 + 1) ) << 0) + 1;;
     Roulette.lastSpin.time = new Date().getTime();
 
     io.emit('roll-receive', {roll: this.current, lastSpin: Roulette.lastSpin});
@@ -19,6 +15,8 @@ Roulette.spin = function() {
 }
 
 Roulette.interval = setInterval(Roulette.spin, 20000);
+Roulette.spin();
+
 
 function sanitiseMessage(text) {
     text = (String(text));
