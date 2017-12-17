@@ -1,7 +1,5 @@
 const Roulette = {};
 
-Roulette.current = 0;
-
 Roulette.rollTo = function(num, time = 300) {
     Roulette.show();
     const rand = randRange(1,4);
@@ -26,7 +24,7 @@ Roulette.show = function() {
 Roulette.hide = function() {
     $('.countdown-sheath').css('display','');
     Roulette.hideInterval = setInterval(function() {
-        $('.countdown-clock').text((Roulette.lastSpin.time + 15000) - new Date().getTime());
+        $('.countdown-clock').text((Roulette.lastSpin.time + 20000) - new Date().getTime());
     }, 10);
 }
 
@@ -37,6 +35,7 @@ $(document).ready(function() {
 
     Roulette.resize();
     Roulette.rollTo(Roulette.lastSpin.result,0);
+    Roulette.current = Roulette.lastSpin.result;
     Roulette.hide();
 });
 
@@ -46,6 +45,6 @@ $(window).resize(function() {
 
 
 socket.on('roll-receive', function(data) {
-    Roulette.rollTo(data.roll);
     Roulette.lastSpin = data.lastSpin;
+    Roulette.rollTo(data.roll);
 });
