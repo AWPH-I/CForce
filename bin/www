@@ -6,7 +6,7 @@
 
 var app = require('../app');
 var debug = require('debug')('cforce:server');
-var http = require('http');
+var http = require('https');
 
 const port = 8080;
 
