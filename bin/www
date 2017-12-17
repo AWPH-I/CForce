@@ -21,7 +21,7 @@ app.set('port', normalizePort(port || 3000));
 
 var server = http.createServer(app);
 
-http.get('*', function(req, res) {  
+server.get('*', function(req, res) {  
     res.redirect('https://' + req.headers.host + req.url);
 });
 
