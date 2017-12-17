@@ -35,7 +35,6 @@ $(document).ready(function() {
 
     Roulette.resize();
     Roulette.rollTo(Roulette.lastSpin.result,0);
-    Roulette.current = Roulette.lastSpin.result;
     Roulette.hide();
 });
 
@@ -46,6 +45,6 @@ $(window).resize(function() {
 
 socket.on('roll-receive', function(data) {
     console.log(data);
-    Roulette.lastSpin = data.lastSpin;
-    Roulette.rollTo(data.roll);
+    Roulette.lastSpin = data;
+    Roulette.rollTo(data.result);
 });

@@ -10,7 +10,7 @@ Roulette.spin = function() {
     Roulette.lastSpin.result = ((Math.random() * (14 - 0 + 1) ) << 0) + 1;;
     Roulette.lastSpin.time = new Date().getTime();
 
-    io.emit('roll-receive', {roll: this.current, lastSpin: Roulette.lastSpin});
+    io.emit('roll-receive', Roulette.lastSpin);
     //Work out winners etc.
 }
 
