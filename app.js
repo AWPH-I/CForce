@@ -10,6 +10,8 @@ var sharedsession = require('socket.io-express-session');
 
 var mongoose = require('mongoose');
 
+var secure = require('express-force-https');
+
 var app = express();
 
 //Create socketIO server
@@ -37,6 +39,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(secure);
 
 var sess = session({
     secret: 'seOOOSPAPSDwag167321320sdmSKRRRgucciGAngGG,',
@@ -86,15 +90,6 @@ app.use(function(req, res, next) {
             next();
         }
     });
-});
-
-app.use(function(req, res, next) {
-    if(!req.secure) {
-        var secureUrl = "https://" + req.headers['host'] + req.url; 
-        res.writeHead(301, { "Location":  secureUrl });
-        res.end();
-    }
-    next();
 });
 /* */
 
