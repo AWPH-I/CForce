@@ -45,6 +45,7 @@ $(window).resize(function() {
 
 
 socket.on('roll-receive', function(data) {
+    console.log(data);
     Roulette.lastSpin = data.lastSpin;
     Roulette.rollTo(data.roll);
 });
