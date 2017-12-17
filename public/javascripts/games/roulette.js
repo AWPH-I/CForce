@@ -2,7 +2,7 @@ const Roulette = {};
 
 Roulette.current = 0;
 
-Roulette.rollTo = function(num, time = 300) {
+Roulette.rollTo = function(num, time = 300, vary = true) {
     Roulette.show();
     const rand = randRange(3,8);
 
@@ -10,17 +10,21 @@ Roulette.rollTo = function(num, time = 300) {
     const endUp = Number($('#roulette-wheel').css('background-position-x').split('px')[0]) - real;
     const variance = ((Math.floor(Math.random() * (2 - 1 + 1)) + 1 == 1 ? 1 : -1) * Math.random() * 31);
 
-    console.log(real + ' ' + endUp + ' ' + variance);
+    if(vary) real += variance;
 
     $('#roulette-wheel').animate({
-        backgroundPositionX: '-=' + (real + variance)
-    }, rand * time * 4, 'easeOutSine', function () {
+        backgroundPositionX: '-=' + real
+    }, rand * time * 4, function () {
         Roulette.current = num;
-        $('#roulette-wheel').animate({
-            backgroundPositionX: endUp
-            }, 1000, function () {
-                Roulette.hide();
-        });
+        if(vary) {
+            $('#roulette-wheel').animate({
+                backgroundPositionX: endUp
+                }, 1000, function () {
+                    Roulette.hide();
+            });
+        } else {
+            Roulette.hide();
+        }
     });
 }
 
@@ -55,7 +59,7 @@ $(document).ready(function() {
 
     Roulette.resize();
     console.log(Roulette.lastSpin);
-    Roulette.rollTo(Roulette.lastSpin.result,0);
+    Roulette.rollTo(Roulette.lastSpin.result, 0, false);
     Roulette.hide();
 });
 
