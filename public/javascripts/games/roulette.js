@@ -1,17 +1,12 @@
 const Roulette = {};
 
-Roulette.rollTo = function(num, time) {
+Roulette.rollTo = function(num, time = 300) {
     Roulette.show();
     const rand = randRange(1,4);
 
-    var duration = rand * 300 * Math.random() * 4;
-    if(!time) duration = time;
-
-    console.log(duration);
-
     $('#roulette-wheel').animate({
         backgroundPositionX: '-=' + (64 * (num - Roulette.current) + 960 * rand)
-    }, duration, function () {
+    }, rand * time * Math.random() * 4, function () {
         Roulette.current = num;
         Roulette.hide();
     });
@@ -39,7 +34,7 @@ $(document).ready(function() {
     });
 
     Roulette.resize();
-    Roulette.rollTo(Roulette.lastSpin.result, 0);
+    Roulette.rollTo(Roulette.lastSpin.result,0);
     Roulette.hide();
 });
 
@@ -49,7 +44,6 @@ $(window).resize(function() {
 
 
 socket.on('roll-receive', function(data) {
-    console.log(data);
     Roulette.lastSpin = data;
-    Roulette.rollTo(data.result, null);
+    Roulette.rollTo(data.result);
 });
