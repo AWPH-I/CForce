@@ -4,16 +4,21 @@ var User = require('mongoose').model('user');
 
 const Roulette = {};
 
-Roulette.lastSpin = new Date().getTime();
+Roulette.lastSpin = {};
+
+Roulette.lastSpin.time = new Date().getTime();
+Roulette.lastSpin.result = 0;
 Roulette.bets = [];
 
 Roulette.spin = function() {
-    this.current = Math.floor(Math.random() * 14);
-    io.emit('roll-receive', {roll: this.current});
-    Roulette.lastSpin = new Date().getTime();
+    Roulette.lastSpin.result = Math.floor(Math.random() * 14);
+    Roulette.lastSpin.time = new Date().getTime();
+
+    io.emit('roll-receive', {roll: this.current, lastSpin: Roulette.lastSpin});
+    //Work out winners etc.
 }
 
-Roulette.interval = setInterval(Roulette.spin, 15000);
+Roulette.interval = setInterval(Roulette.spin, 20000);
 
 function sanitiseMessage(text) {
     text = (String(text));
@@ -25,7 +30,7 @@ function sanitiseMessage(text) {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('index', { title: 'CForce Roulette', isLoggedIn: req.session.isLoggedIn });
+    res.render('index', { title: 'CForce Roulette', isLoggedIn: req.session.isLoggedIn, lastSpin: Roulette.lastSpin });
 });
 
 io.on('connection', function(socket){
@@ -53,9 +58,13 @@ io.on('connection', function(socket){
         };
 
         User.getBalance(socket.handshake.session.userId, function(err, balance) {
-            console.log(err + ' ' + balance)
-            if(err || !balance) {
+            if(err || balance == null) {
                 socket.emit('error-receive', {title:'Received error #BGE4!', body:'Please report this to aWpH--.', type:'danger'});
+                return;
+            }
+
+            if(balance - data.amount < 0) {
+                socket.emit('error-receive', {title:'Invalid bet placed!', body:'You have insufficient funds to place a bet of ' + data.amount + ' tokens.', type:'warning'});
                 return;
             }
         });

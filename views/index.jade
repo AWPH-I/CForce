@@ -14,6 +14,8 @@ block content
             .flex-column.fill
                     .content-box(style='height: 200px;')
                         #roulette-wheel
+                            .countdown-sheath(style='border-radius: 20rem; display: none;')
+                                p.countdown-clock 
                             #pointer
                     .row.flex-fill
                         .col-sm-4.flex-column
@@ -32,3 +34,6 @@ block content
                 input.form-control(type='text', id='chat-input', maxlength='256', onkeydown='if(event.keyCode == 13) $("#chat-button").click();')
                 button.btn.btn-primary#chat-button(type='button', onClick='Chat.messageSend()') 
                     i.fa.fa-paper-plane(aria-hidden='true', style='margin-left: -4px;')
+
+    script.
+        Roulette.lastSpin = !{JSON.stringify(lastSpin)};
