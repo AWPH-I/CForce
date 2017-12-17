@@ -31,7 +31,7 @@ Roulette.rollTo = function(num, time = 300, vary = true) {
 Roulette.resize = function() {
     $('#roulette-wheel').css('background-position-x', $('#roulette-wheel').width() / 2 - 32);
     Roulette.current = 0;
-    Roulette.rollTo(Roulette.lastSpin.result,0);
+    Roulette.rollTo(Roulette.lastSpin.result, 0, false);
 }
 
 Roulette.show = function() {
