@@ -1,4 +1,4 @@
-var socket = io.connect('http://localhost:8081');
+var socket = io.connect('http://moosebot.me:8081');
 
 $.fn.extend({
     animateCss: function (animationName, callback) {
