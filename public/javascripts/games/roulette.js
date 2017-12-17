@@ -1,5 +1,3 @@
-const Roulette = {};
-
 Roulette.rollTo = function(num, time = 300) {
     Roulette.show();
     const rand = randRange(1,4);
