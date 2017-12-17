@@ -13,7 +13,7 @@ var mongoose = require('mongoose');
 var app = express();
 
 //Create socketIO server
-var server = require('https').Server(app);
+var server = require('http').Server(app);
 global.io = require('socket.io')(server);
 
 // connect to db
