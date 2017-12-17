@@ -1,3 +1,5 @@
+const Roulette = {};
+
 Roulette.rollTo = function(num, time = 300) {
     Roulette.show();
     const rand = randRange(1,4);
@@ -32,6 +34,7 @@ $(document).ready(function() {
     });
 
     Roulette.resize();
+    console.log(Roulette.lastSpin);
     Roulette.rollTo(Roulette.lastSpin.result,0);
     Roulette.hide();
 });
