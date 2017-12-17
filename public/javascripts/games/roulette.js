@@ -4,13 +4,23 @@ Roulette.current = 0;
 
 Roulette.rollTo = function(num, time = 300) {
     Roulette.show();
-    const rand = randRange(1,4);
+    const rand = randRange(3,8);
+
+    const real = (64 * (num - Roulette.current) + 960 * rand);
+    const endUp = Number($('#roulette-wheel').css('background-position-x').split('px')[0]) - real;
+    const variance = ((Math.floor(Math.random() * (2 - 1 + 1)) + 1 == 1 ? 1 : -1) * Math.random() * 31);
+
+    console.log(real + ' ' + endUp + ' ' + variance);
 
     $('#roulette-wheel').animate({
-        backgroundPositionX: '-=' + (64 * (num - Roulette.current) + 960 * rand)
-    }, rand * time * Math.random() * 4, function () {
+        backgroundPositionX: '-=' + (real + variance)
+    }, rand * time * 4, 'easeOutSine', function () {
         Roulette.current = num;
-        Roulette.hide();
+        $('#roulette-wheel').animate({
+            backgroundPositionX: endUp
+            }, 1000, function () {
+                Roulette.hide();
+        });
     });
 }
 
