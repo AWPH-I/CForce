@@ -5,7 +5,7 @@ Roulette.rollTo = function(num, time = 300) {
     const rand = randRange(1,4);
 
     $('#roulette-wheel').animate({
-        backgroundPositionX: '-=' + (64 * (num - Roulette.current) + 960 * rand)
+        backgroundPositionX: '-=' + ((64 * ((num - Roulette.current) + 1)) + 960 * rand)
     }, rand * time * Math.random() * 4, function () {
         Roulette.current = num;
         Roulette.hide();
@@ -45,6 +45,7 @@ $(window).resize(function() {
 
 
 socket.on('roll-receive', function(data) {
+    console.log()
     Roulette.lastSpin = data;
     Roulette.rollTo(data.result);
 });
