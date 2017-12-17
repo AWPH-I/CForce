@@ -489,10 +489,6 @@ etag@~1.8.0, etag@~1.8.1:
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
 
-express-force-https@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/express-force-https/-/express-force-https-1.0.0.tgz#2adb8121a6894616fc78ea05b15bd8d4b855fd0c"
-
 express-session@^1.15.6:
   version "1.15.6"
   resolved "https://registry.yarnpkg.com/express-session/-/express-session-1.15.6.tgz#47b4160c88f42ab70fe8a508e31cbff76757ab0a"
