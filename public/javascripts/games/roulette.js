@@ -14,12 +14,12 @@ Roulette.rollTo = function(num, time = 300, vary = true) {
 
     $('#roulette-wheel').animate({
         backgroundPositionX: '-=' + real
-    }, rand * time * 4, function () {
+    }, rand * time * 4, 'easeOutExpo', function () {
         Roulette.current = num;
         if(vary) {
             $('#roulette-wheel').animate({
                 backgroundPositionX: endUp
-                }, 1000, function () {
+                }, 1000, 'easeOutExpo', function () {
                     Roulette.hide();
             });
         } else {
