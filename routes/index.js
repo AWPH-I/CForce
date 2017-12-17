@@ -15,7 +15,7 @@ Roulette.spin = function() {
     //Work out winners etc.
 }
 
-Roulette.interval = setInterval(Roulette.spin, 20000);
+Roulette.interval = setInterval(Roulette.spin, 2000);
 Roulette.spin();
 
 
