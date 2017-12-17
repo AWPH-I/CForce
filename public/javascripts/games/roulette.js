@@ -16,6 +16,8 @@ Roulette.rollTo = function(num, time = 300) {
 
 Roulette.resize = function() {
     $('#roulette-wheel').css('background-position-x', $('#roulette-wheel').width() / 2 - 32);
+    Roulette.current = 0;
+    Roulette.rollTo(Roulette.lastSpin.result,0);
 }
 
 Roulette.show = function() {
@@ -53,6 +55,7 @@ $(window).resize(function() {
 
 
 socket.on('roll-receive', function(data) {
+    console.log(new Date());
     Roulette.lastSpin = data;
     Roulette.lastSpin.time += new Date().getTime() - Roulette.lastSpin.time; 
     Roulette.rollTo(data.result);

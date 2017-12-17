@@ -9,6 +9,7 @@ Roulette.bets = [];
 Roulette.spin = function() {
     Roulette.lastSpin.result = ((Math.random() * (14 - 0 + 1) ) << 0);
     Roulette.lastSpin.time = new Date().getTime();
+    console.log(new Date());
 
     io.emit('roll-receive', Roulette.lastSpin);
     //Work out winners etc.
