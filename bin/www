@@ -21,6 +21,15 @@ app.set('port', normalizePort(port || 3000));
 
 var server = http.createServer(app);
 
+server.use('/path', function(req, res, next) {
+  if(!req.secure) {
+    var secureUrl = "https://" + req.headers['host'] + req.url; 
+    res.writeHead(301, { "Location":  secureUrl });
+    res.end();
+  }
+  next();
+});
+
 /**
  * Listen on provided port, on all network interfaces.
  */
