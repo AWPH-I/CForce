@@ -29,7 +29,7 @@ Roulette.hide = function() {
     $('.countdown-sheath').css('display','');
     var x;
     Roulette.hideInterval = setInterval(function() {
-        x = (Roulette.lastSpin.time + 20000) - new Date().getTime();
+        x = (Roulette.lastSpin.time + 24000) - new Date().getTime();
         $('.countdown-clock').text(x);
         if(x <= 0) {
             clearInterval(Roulette.hideInterval);
@@ -55,8 +55,6 @@ $(window).resize(function() {
 
 
 socket.on('roll-receive', function(data) {
-    console.log(new Date());
     Roulette.lastSpin = data;
-    Roulette.lastSpin.time += new Date().getTime() - Roulette.lastSpin.time; 
     Roulette.rollTo(data.result);
 });
