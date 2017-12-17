@@ -25,8 +25,14 @@ Roulette.show = function() {
 
 Roulette.hide = function() {
     $('.countdown-sheath').css('display','');
+    var x;
     Roulette.hideInterval = setInterval(function() {
-        $('.countdown-clock').text((Roulette.lastSpin.time + 20000) - new Date().getTime());
+        x = (Roulette.lastSpin.time + 20000) - new Date().getTime();
+        $('.countdown-clock').text(x);
+        if(x <= 0) {
+            clearInterval(Roulette.hideInterval);
+            $('.countdown-clock').text('0');
+        }
     }, 10);
 }
 
@@ -48,6 +54,6 @@ $(window).resize(function() {
 
 socket.on('roll-receive', function(data) {
     Roulette.lastSpin = data;
-    Roulette.lastSpin.time = new Date().getTime();
+    Roulette.lastSpin.time += new Date().getTime() - Roulette.lastSpin.time; 
     Roulette.rollTo(data.result);
 });
