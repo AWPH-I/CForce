@@ -18,7 +18,7 @@ router.post('/', function (req, res, next) {
 
             User.create(userData, function(error, user) {
                 if(error) {
-                    res.json({err:{title:'Received error #M0UC!', body:'Please report this to aWpH--.', type:danger}});
+                    res.json({err:{title: 'Received error #M0UC!', body:'Please report this to aWpH--.', type: 'danger'}, log: error});
                 } else {
                     req.session.userId = user._id;
                     res.json({redirect:'/profile'});
@@ -28,7 +28,7 @@ router.post('/', function (req, res, next) {
             res.json({err:{title:'Passwords don\'t match!', body:'The passwords you have entered are not the same.', type:'warning'}});  
         }
     } else {
-        res.json({ err:{title: 'Empty fields!', body:'Please provide all necessary information to login.', type:'warning'} });
+        res.json({err:{title: 'Empty fields!', body:'Please provide all necessary information to login.', type:'warning'}});
     }
 });
 

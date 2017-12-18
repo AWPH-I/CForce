@@ -7,16 +7,28 @@ $(document).ready(function() {
     Chat.input = $('#chat-input');
 
     Chat.messageReceive = function(data) {
-        const markup = `
-        <img class="chat-avatar" src="/images/MW.svg"></img>
-        <div style="display: flex; flex-direction: column;">
-            <p class="chat-text chat-username">${data.from}</p>
-            <p class="chat-text">${data.message}</p>
-        </div>
-        `;
         const msg = document.createElement('li');
         msg.className = 'chat-message';
-        msg.innerHTML = markup;
+
+        const img = document.createElement('img');
+        img.className = 'chat-avatar';
+        $(img).attr('src','/images/MW.svg');
+        $(msg).append(img);
+
+        const div = document.createElement('div');
+        div.className = 'flex-column';
+        $(msg).append(div);
+
+        let p = document.createElement('p');
+        p.className = 'chat-text chat-username';
+        $(p).text(escapeHtml(data.from));
+        $(div).append(p);
+
+        p = document.createElement('p');
+        p.className = 'chat-text';
+        $(p).text(escapeHtml(data.message));
+        $(div).append(p);
+
         Chat.content.append(msg);
 
         Chat.box.scroll(0, Chat.box.scrollHeight);

@@ -21,6 +21,8 @@
     border-radius: 25px;
     border: 1px solid transparent;
     border-color: var(--cl-carbon);
+
+    word-break: break-word;
 }
 
 .chat-username {

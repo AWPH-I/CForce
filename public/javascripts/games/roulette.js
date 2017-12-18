@@ -8,18 +8,19 @@ Roulette.rollTo = function(num, time = 300, vary = true) {
 
     var real = (64 * (num - Roulette.current) + 960 * rand);
     const endUp = Number($('#roulette-wheel').css('background-position-x').split('px')[0]) - real;
-    const variance = ((Math.floor(Math.random() * (2 - 1 + 1)) + 1 == 1 ? 1 : -1) * Math.random() * 31);
+    const posOrNeg = (Math.floor(Math.random() * (2 - 1 + 1)) + 1 == 1 ? 1 : -1);
+    const variance = (posOrNeg * Math.random() * 31);
 
     if(vary) real += variance;
 
     $('#roulette-wheel').animate({
         backgroundPositionX: '-=' + real
-    }, rand * time * 4, 'easeOutExpo', function () {
+    }, rand * time * 3.5, 'easeOutExpo', function () {
         Roulette.current = num;
         if(vary) {
             $('#roulette-wheel').animate({
                 backgroundPositionX: endUp
-                }, 1000, 'easeOutExpo', function () {
+                }, variance / (posOrNeg * 31) * 800, function () {
                     Roulette.hide();
             });
         } else {
@@ -35,19 +36,35 @@ Roulette.resize = function() {
 }
 
 Roulette.show = function() {
-    clearInterval(Roulette.hideInterval);
     $('.countdown-sheath').css('display','none');
+    Roulette.clock.stop();
 }
 
 Roulette.hide = function() {
     $('.countdown-sheath').css('display','');
-    var x;
-    Roulette.hideInterval = setInterval(function() {
-        x = (Roulette.lastSpin.time + 24000) - new Date().getTime();
-        $('.countdown-clock').text(x);
-        if(x <= 0) {
-            clearInterval(Roulette.hideInterval);
-            $('.countdown-clock').text('0');
+}
+
+Roulette.clock = {};
+
+Roulette.clock.stop = function() {
+    clearInterval(Roulette.clock.interval); 
+}
+
+Roulette.clock.format = function(n) {
+    n = String(n);
+    while(n.length < 5) n = '0' + n;
+    return String(n).substring(0,2) + ':' + String(n).substring(2,4);
+}
+
+Roulette.clock.restart = function(set) {
+    clearInterval(Roulette.clock.interval);
+    Roulette.clock.counter = (set == null ? 20000 : set);
+    Roulette.clock.interval = setInterval(function() {
+        Roulette.clock.counter -= 10;
+        $('.countdown-clock').text(Roulette.clock.format(Roulette.clock.counter));
+        if(Roulette.clock.counter <= 0) {
+            Roulette.clock.stop();
+            $('.countdown-clock').text('00:00');
         }
     }, 10);
 }
@@ -58,8 +75,8 @@ $(document).ready(function() {
     });
 
     Roulette.resize();
-    console.log(Roulette.lastSpin);
     Roulette.rollTo(Roulette.lastSpin.result, 0, false);
+    Roulette.clock.restart(Roulette.lastSpin.time + 20000 - _injTime);
     Roulette.hide();
 });
 
@@ -71,4 +88,5 @@ $(window).resize(function() {
 socket.on('roll-receive', function(data) {
     Roulette.lastSpin = data;
     Roulette.rollTo(data.result);
+    Roulette.clock.restart();
 });

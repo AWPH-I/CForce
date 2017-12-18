@@ -17,7 +17,6 @@ Roulette.spin = function() {
 Roulette.interval = setInterval(Roulette.spin, 20000);
 Roulette.spin();
 
-
 function sanitiseMessage(text) {
     text = (String(text));
     if(text.length > 256) {
@@ -28,7 +27,7 @@ function sanitiseMessage(text) {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('index', { title: 'CForce Roulette', isLoggedIn: req.session.isLoggedIn, lastSpin: Roulette.lastSpin });
+    res.render('index', { title: 'CForce Roulette', isLoggedIn: req.session.isLoggedIn, lastSpin: Roulette.lastSpin, injTime: new Date().getTime() });
 });
 
 io.on('connection', function(socket){

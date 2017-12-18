@@ -7,6 +7,10 @@ function handlePOST(url, params) {
         if(data.redirect) {
             window.location = data.redirect;
         }
+
+        if(data.log) {
+            console.log(data.log);
+        }
     });
 }
 
