@@ -1,4 +1,4 @@
-var socket = io.connect('https://127.0.0.1:8081');
+var socket = io();
 
 $.fn.extend({
     animateCss: function (animationName, callback) {

@@ -23,6 +23,8 @@ var UserSchema = new mongoose.Schema({
   }
 });
 
+const SALT_WORK_FACTOR = 10;
+
 UserSchema.statics.authenticate = function(email, password, callback) {
     User.findOne({ email: email }).exec(function (err, user) {
         //Catches err or non-existent user
@@ -35,6 +37,7 @@ UserSchema.statics.authenticate = function(email, password, callback) {
         }
 
         bcrypt.compare(password, user.password, function(err, result) {
+            console.log(password + ' ' + user.password);
             if (result === true) {
                 //This returns with no error and the found, validated user object
                 return callback(null, user);
@@ -70,7 +73,7 @@ UserSchema.statics.getBalance = function(id, callback) {
             err.status = 401;
             return callback(err);
         } else {
-            if(!user.balance) {
+            if(user.balance == null) {
                 user.balance = 0;
                 user.save(function (err, updatedUser) {
                     if (err) return callback(err);
@@ -85,14 +88,20 @@ UserSchema.statics.getBalance = function(id, callback) {
 
 UserSchema.pre('save', function(next) {
     var user = this;
-    //Hash the password
-    bcrypt.hash(user.password, 10, function(err, hash) {
-        if (err) {
-          return next(err);
-        }
-        user.password = hash;
-        next();
-    })
+
+
+
+    if (!user.isModified('password')) return next();
+    bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
+        if (err) return next(err);
+
+        bcrypt.hash(user.password, salt, function(err, hash) {
+            if (err) return next(err);
+
+            user.password = hash;
+            next();
+        });
+    });
 });
 
 var User = mongoose.model('user', UserSchema);

@@ -2,7 +2,7 @@ var Chat = {};
 
 
 $(document).ready(function() {
-    Chat.box = $('#chat-box');
+    Chat.box = $('#chat-box')[0];
     Chat.content = $('#chat-content');
     Chat.input = $('#chat-input');
 
@@ -21,12 +21,12 @@ $(document).ready(function() {
 
         let p = document.createElement('p');
         p.className = 'chat-text chat-username';
-        $(p).text(escapeHtml(data.from));
+        $(p).text(data.from);
         $(div).append(p);
 
         p = document.createElement('p');
         p.className = 'chat-text';
-        $(p).text(escapeHtml(data.message));
+        $(p).text(data.message);
         $(div).append(p);
 
         Chat.content.append(msg);

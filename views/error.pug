@@ -1,0 +1,11 @@
+extends layout
+
+block stylesheets
+    link(rel='stylesheet', href='/stylesheets/blerr.css')
+
+block content
+    .flex-centre
+        .container
+            h1.display-1 #{message}
+            .lead #{error.status}
+            p #{error.stack}

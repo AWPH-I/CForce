@@ -1,0 +1,19 @@
+.flex-centre {
+    display: flex; 
+    position: fixed;
+
+    width: 100vw; 
+    height: 100vh; 
+
+    left: 0;
+    top: 0;
+    z-index: 0;
+
+    align-items: center; 
+    text-align: center; 
+    justify-content: center;
+
+    flex-direction: column;
+    flex-flow: column;
+    -ms-flex-flow: column;
+}

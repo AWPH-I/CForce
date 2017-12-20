@@ -16,10 +16,11 @@ const port = 8080;
 app.set('port', normalizePort(port || 3000));
 
 /**
- * Create HTTPS server.
+ * Create HTTP server & attach socketIO.
  */
 
 var server = http.createServer(app);
+app.io.attach(server);
 
 /**
  * Listen on provided port, on all network interfaces.

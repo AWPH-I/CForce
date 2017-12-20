@@ -3,6 +3,7 @@ const Roulette = {};
 Roulette.current = 0;
 
 Roulette.rollTo = function(num, time = 300, vary = true) {
+    console.log('Rolling' + time + vary);
     Roulette.show();
     const rand = randRange(3,8);
 
@@ -47,6 +48,7 @@ Roulette.hide = function() {
 Roulette.clock = {};
 
 Roulette.clock.stop = function() {
+    console.log('Stopped');
     clearInterval(Roulette.clock.interval); 
 }
 
@@ -57,6 +59,7 @@ Roulette.clock.format = function(n) {
 }
 
 Roulette.clock.restart = function(set) {
+    console.log('Restarted');
     clearInterval(Roulette.clock.interval);
     Roulette.clock.counter = (set == null ? 20000 : set);
     Roulette.clock.interval = setInterval(function() {
@@ -75,7 +78,6 @@ $(document).ready(function() {
     });
 
     Roulette.resize();
-    Roulette.rollTo(Roulette.lastSpin.result, 0, false);
     Roulette.clock.restart(Roulette.lastSpin.time + 20000 - _injTime);
     Roulette.hide();
 });
@@ -86,6 +88,7 @@ $(window).resize(function() {
 
 
 socket.on('roll-receive', function(data) {
+    console.log('Roll receive');
     Roulette.lastSpin = data;
     Roulette.rollTo(data.result);
     Roulette.clock.restart();
