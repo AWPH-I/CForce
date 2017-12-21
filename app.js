@@ -12,6 +12,8 @@ var session = require('express-session');
 //Create app to export
 var app = express();
 
+app.set('trust proxy', 1);
+
 
 var sess = session({
     secret: 'seOOOSPAPSDwag167321320sdmSKRRRgucciGAngGG,',
@@ -45,9 +47,6 @@ var User = mongoose.model('user');
 var helmet = require('helmet');
 app.use(helmet());
 
-//For nginx
-app.enable('trust proxy');
-
 //Useragent grabbing
 var useragent = require('express-useragent');
 app.use(useragent.express());
@@ -68,13 +67,22 @@ app.get('*', function(req, res, next) {
     if(req.useragent.browser === 'IE') {
         return res.render('blocked');
     };
+
     User.validateId(req.session.userId, function(err, user) {
         if(err || !user) {
             req.session.isLoggedIn = false;
             next(); 
         } else {
             req.session.isLoggedIn = true;
-            next();
+            User.getBalance(req.session.userId, function(err, balance) {
+                if(err || !user) {
+                    req.session.balance = null;
+                    next(); 
+                } else {
+                    req.session.balance = balance;
+                    next();
+                }
+            });
         }
     });
 });

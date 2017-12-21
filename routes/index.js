@@ -6,10 +6,14 @@ module.exports = function(io) {
     const Roulette = {};
     Roulette.lastSpin = {};
     Roulette.bets = [];
+    Roulette.history = [];
 
     Roulette.spin = function() {
-        Roulette.lastSpin.result = ((Math.random() * (14 - 0 + 1) ) << 0);
+        Roulette.lastSpin.result = Math.floor(Math.random() * (14 - 0 + 1));
         Roulette.lastSpin.time = new Date().getTime();
+
+        if(Roulette.history.length === 16) Roulette.history.shift();
+        Roulette.history.push(Roulette.lastSpin.result);
 
         io.emit('roll-receive', Roulette.lastSpin);
         //Work out winners etc.
@@ -28,7 +32,8 @@ module.exports = function(io) {
 
     /* GET home page. */
     router.get('/', function(req, res, next) {
-        res.render('index', { title: 'CForce Roulette', isLoggedIn: req.session.isLoggedIn, lastSpin: Roulette.lastSpin, injTime: new Date().getTime() });
+        const injections = {lastSpin: Roulette.lastSpin, injTime: new Date().getTime(), history: Roulette.history}
+        res.render('index', {title: 'CForce Roulette', session: req.session, injections: injections});
     });
 
     io.on('connection', function(socket){

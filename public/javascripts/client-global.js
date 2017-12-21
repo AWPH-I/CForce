@@ -15,7 +15,7 @@ $.fn.extend({
 
 //Both ranges inclusive
 function randRange(minimum, maximum) {
-    return ((Math.random() * (maximum - minimum + 1) ) << 0) + 1;
+    return Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
 }
 
 function throwErr(data) { 

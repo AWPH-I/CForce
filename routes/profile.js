@@ -5,7 +5,7 @@ router.get('/', function(req, res, next) {
     if(!req.session.isLoggedIn) {
         res.redirect('/login');
     } else {
-        res.render('profile', {title: 'Profile', isLoggedIn: req.session.isLoggedIn})
+        res.render('profile', {title: 'Profile', session: req.session})
     }
 });
 

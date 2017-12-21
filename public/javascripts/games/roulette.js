@@ -3,16 +3,19 @@ const Roulette = {};
 Roulette.current = 0;
 
 Roulette.rollTo = function(num, time = 300, vary = true) {
-    console.log('Rolling' + time + vary);
-    Roulette.show();
-    const rand = randRange(3,8);
-
+    const rand = randRange(5,8);
     var real = (64 * (num - Roulette.current) + 960 * rand);
-    const endUp = Number($('#roulette-wheel').css('background-position-x').split('px')[0]) - real;
-    const posOrNeg = (Math.floor(Math.random() * (2 - 1 + 1)) + 1 == 1 ? 1 : -1);
-    const variance = (posOrNeg * Math.random() * 31);
+    
+    let endUp, posOrNeg, variance;
 
-    if(vary) real += variance;
+    if(vary) {
+        endUp = Number($('#roulette-wheel').css('background-position-x').split('px')[0]) - real;
+        posOrNeg = (Math.floor(Math.random() * (2 - 1 + 1)) + 1 == 1 ? 1 : -1);
+        variance = (posOrNeg * Math.random() * 31);
+
+        real += variance;
+        Roulette.show();
+    }
 
     $('#roulette-wheel').animate({
         backgroundPositionX: '-=' + real
@@ -23,6 +26,7 @@ Roulette.rollTo = function(num, time = 300, vary = true) {
                 backgroundPositionX: endUp
                 }, variance / (posOrNeg * 31) * 800, function () {
                     Roulette.hide();
+                    Roulette.history.add(num);
             });
         } else {
             Roulette.hide();
@@ -48,7 +52,6 @@ Roulette.hide = function() {
 Roulette.clock = {};
 
 Roulette.clock.stop = function() {
-    console.log('Stopped');
     clearInterval(Roulette.clock.interval); 
 }
 
@@ -59,7 +62,6 @@ Roulette.clock.format = function(n) {
 }
 
 Roulette.clock.restart = function(set) {
-    console.log('Restarted');
     clearInterval(Roulette.clock.interval);
     Roulette.clock.counter = (set == null ? 20000 : set);
     Roulette.clock.interval = setInterval(function() {
@@ -70,6 +72,31 @@ Roulette.clock.restart = function(set) {
             $('.countdown-clock').text('00:00');
         }
     }, 10);
+}
+
+Roulette.history = {};
+
+Roulette.history.add = function(roll, time = 500) {
+    var cl;
+    if(roll === 0) {
+        cl = '#43A047'; //Green
+    } else if(roll % 2 === 0) {
+        cl = '#212121'; //Black
+    } else if(roll % 2 !== 0) {
+        cl = '#E53935'; //Red
+    }
+    const slots = $('.roulette-history-slot');
+    for(var i = slots.length - 2; i >= 0; i --) {
+        if($(slots[i]).css('background-color') !== 'rgba(0, 0, 0, 0)') {
+            $(slots[i + 1]).animate({
+                backgroundColor: $(slots[i]).css('background-color')
+            }, {queue: false, duration: time, easing: 'easeInQuad'});
+        }
+    }
+
+    $(slots[0]).animate({
+        backgroundColor: cl
+    }, {queue: false, duration: time, easing:'easeInQuad'});
 }
 
 $(document).ready(function() {
@@ -88,7 +115,6 @@ $(window).resize(function() {
 
 
 socket.on('roll-receive', function(data) {
-    console.log('Roll receive');
     Roulette.lastSpin = data;
     Roulette.rollTo(data.result);
     Roulette.clock.restart();

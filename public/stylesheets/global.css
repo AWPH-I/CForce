@@ -15,6 +15,13 @@ html, body {
     height: 100%;
 }
 
+.flex-centre {
+    display: flex; 
+
+    align-items: center; 
+    justify-content: center;
+}
+
 .content-box {
     position: relative;
     width: 100%;
@@ -32,6 +39,36 @@ html, body {
 
     margin-left: auto; 
     margin-right: auto;
+}
+
+.rounded-border {
+    border: 1px solid transparent;
+    border-radius: 2000rem;
+    border-color: var(--cl-carbon);   
+}
+
+.balance-container {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    min-width: 150px;
+    position: relative;
+    height: 32px;
+}
+
+.credit-icon {
+    width: 32px;
+    height: 32px;
+    background-color: #C5CAE9;
+    padding: 5px;
+    right: 0;
+    position: absolute;
+}
+
+.fa-diamond {
+    position: absolute;
+    left: 21%;
+    top: 23%;
 }
 
 .fill {
@@ -71,4 +108,29 @@ html, body {
 
 .alert-close:hover {
     opacity: 1;
+}
+
+.nav-padded {
+    padding: 0.5rem;
+}
+
+@media screen and (min-width: 992px) {
+    .navbar-expand-lg .navbar-nav {
+        align-items: center;
+    }
+
+    .navbar {
+        padding: .2rem .2rem !important;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .nav-padded {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .logout-btn {
+        width: 100%;
+    }
 }

@@ -3,7 +3,7 @@ var router = express.Router();
 var User = require('mongoose').model('user');
 
 router.get('/', function(req, res, next) {
-    res.render('signup', { title: 'Sign Up', isLoggedIn: req.session.isLoggedIn})
+    res.render('signup', { title: 'Sign Up', session: req.session})
 });
 
 router.post('/', function (req, res, next) {

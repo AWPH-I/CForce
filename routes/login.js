@@ -6,7 +6,7 @@ router.get('/', function(req, res, next) {
     if(req.session.isLoggedIn) {
         res.redirect('/profile');
     } else {
-        res.render('login', {title: 'Login', isLoggedIn: false});
+        res.render('login', {title: 'Login', session: req.session});
     }
 });
 

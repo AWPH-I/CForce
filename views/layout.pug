@@ -20,24 +20,35 @@ html
     
     body.flex-column
         nav.navbar.navbar-expand-lg.navbar-light(style='background-color: var(--cl-solitude); z-index: 20000;')
-            a.navbar-brand(href='#') CForce Roulette
+            a.navbar-brand.nav-padded(href='#') CForce Roulette
             button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
                 span.navbar-toggler-icon
             #navbarSupportedContent.collapse.navbar-collapse
-                ul.navbar-nav.mr-auto
+                ul.nav.navbar-nav.mr-auto
                     li.nav-item
                         a.nav-link(href='/') Home
-                    if isLoggedIn
+                    if session.isLoggedIn
                         li.nav-item
                             a.nav-link(href='/profile') Profile
                     else
                         li.nav-item
                             a.nav-link(href='/login') Login
                 
-                if isLoggedIn
-                    a.btn.btn-outline-danger.my-2.my-sm-0(href='/logout', role='button') Log Out
+                if session.isLoggedIn
+                    ul.nav.navbar-nav
+                        li.nav-item
+                            .nav-padded
+                                .rounded-border.balance-container
+                                    p(style='margin: 0; padding-right: 34px;') #{session.balance}
+                                    .credit-icon.rounded-border
+                                        i.fa.fa-diamond(aria-hidden='true')
+
+                        li.nav-item
+                            .nav-padded
+                                a.btn.logout-btn.btn-outline-danger(href='/logout', role='button') Log Out
               
         block content
         
         script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js', integrity='sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh' crossorigin='anonymous')
         script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js', integrity='sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ', crossorigin='anonymous')
+

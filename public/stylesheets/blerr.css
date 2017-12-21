@@ -14,6 +14,5 @@
     justify-content: center;
 
     flex-direction: column;
-    flex-flow: column;
     -ms-flex-flow: column;
 }

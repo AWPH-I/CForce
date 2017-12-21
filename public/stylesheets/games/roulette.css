@@ -35,10 +35,27 @@
 
     height: 64px;
 
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    position: relative;
+}
+
+#roulette-history {
+    height: 32px;
+    width: 70%;    
+    position: relative;
+
+    margin-top: 20px;
+}
+
+.roulette-history-slot {
+    height: 28px;
+    width: 28px;
+
+    margin-left: 2px;
+    margin-right: 2px;
+
+    border: 1px solid transparent;
+    border-radius: 20rem;
+    border-color: var(--cl-carbon);
 }
 
 #pointer {
