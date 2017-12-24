@@ -3,7 +3,7 @@ var router = express.Router();
 var User = require('mongoose').model('user');
 
 router.get('/', function(req, res, next) {
-    if(req.session.isLoggedIn) {
+    if(req.session.user != null) {
         res.redirect('/profile');
     } else {
         res.render('login', {title: 'Login', session: req.session});

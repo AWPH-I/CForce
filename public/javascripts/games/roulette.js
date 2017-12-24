@@ -2,6 +2,8 @@ const Roulette = {};
 
 Roulette.current = 0;
 
+socket.emit('update-ui-req', null);
+
 Roulette.rollTo = function(num, time = 300, vary = true) {
     const rand = randRange(5,8);
     var real = (64 * (num - Roulette.current) + 960 * rand);
@@ -28,6 +30,7 @@ Roulette.rollTo = function(num, time = 300, vary = true) {
                     Roulette.hide();
                     Roulette.history.add(num);
             });
+            socket.emit('update-ui-req', null);
         } else {
             Roulette.hide();
         }
@@ -101,7 +104,7 @@ Roulette.history.add = function(roll, time = 500) {
 
 $(document).ready(function() {
     $('.bet-btn').click(function() {
-        socket.emit('bet-send', {bet: this.getAttribute('bet'), amount: 5} /* <-  credits go here*/);
+        socket.emit('bet-send', {bet: this.getAttribute('bet'), amount: 1} /* <-  credits go here*/);
     });
 
     Roulette.resize();

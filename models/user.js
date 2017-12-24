@@ -37,7 +37,6 @@ UserSchema.statics.authenticate = function(email, password, callback) {
         }
 
         bcrypt.compare(password, user.password, function(err, result) {
-            console.log(password + ' ' + user.password);
             if (result === true) {
                 //This returns with no error and the found, validated user object
                 return callback(null, user);
@@ -50,41 +49,6 @@ UserSchema.statics.authenticate = function(email, password, callback) {
     });
 }
 
-UserSchema.statics.validateId = function(id, callback) {
-    User.findOne({ _id: id }).exec(function (err, user) {
-        if (err) {
-            return callback(err);
-        } else if (!user) {
-            var err = new Error('User not found.');
-            err.status = 401;
-            return callback(err);
-        } else {
-            return callback(null, user);
-        }
-    });
-}
-
-UserSchema.statics.getBalance = function(id, callback) {
-    User.findOne({ _id: id }).exec(function (err, user) {
-        if (err) {
-            return callback(err);
-        } else if (!user) {
-            var err = new Error('User not found.');
-            err.status = 401;
-            return callback(err);
-        } else {
-            if(user.balance == null) {
-                user.balance = 0;
-                user.save(function (err, updatedUser) {
-                    if (err) return callback(err);
-                    return callback(null, updatedUser.balance);
-                });
-            } else {
-                return callback(null, user.balance);
-            }
-        }
-    });
-}
 
 UserSchema.pre('save', function(next) {
     var user = this;
@@ -100,6 +64,8 @@ UserSchema.pre('save', function(next) {
                 next();
             });
         });
+    } else {
+        next();
     }
 });
 

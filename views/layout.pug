@@ -27,22 +27,24 @@ html
                 ul.nav.navbar-nav.mr-auto
                     li.nav-item
                         a.nav-link(href='/') Home
-                    if session.isLoggedIn
+                    if session.user
                         li.nav-item
                             a.nav-link(href='/profile') Profile
                     else
                         li.nav-item
                             a.nav-link(href='/login') Login
-                
-                if session.isLoggedIn
-                    ul.nav.navbar-nav
-                        li.nav-item
-                            .nav-padded
-                                .rounded-border.balance-container
-                                    p(style='margin: 0; padding-right: 34px;') #{session.balance}
-                                    .credit-icon.rounded-border
-                                        i.fa.fa-diamond(aria-hidden='true')
+                    
+                ul.nav.navbar-nav
+                    li.nav-item
+                        .nav-padded
+                            .rounded-border.credit-container
+                                if session.user
+                                    p#balance-text(style='margin: 0; padding-right: 34px;') #{session.user.balance}
+                                else
+                                    p#balance-text(style='margin: 0; padding-right: 34px;') 0
+                                i.credit-icon.fa.fa-diamond(aria-hidden='true')
 
+                    if session.user
                         li.nav-item
                             .nav-padded
                                 a.btn.logout-btn.btn-outline-danger(href='/logout', role='button') Log Out

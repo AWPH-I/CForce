@@ -38,6 +38,8 @@ var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/CForce', function(err) {
     console.log('Connected to mongoDB');
 });
+
+mongoose.Promise = global.Promise;
 const db = mongoose.connection;
 
 require('./models/user');
@@ -63,28 +65,18 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 //On every page req:
-app.get('*', function(req, res, next) {
+app.get('*', async function(req, res, next) {
     if(req.useragent.browser === 'IE') {
         return res.render('blocked');
     };
 
-    User.validateId(req.session.userId, function(err, user) {
-        if(err || !user) {
-            req.session.isLoggedIn = false;
-            next(); 
-        } else {
-            req.session.isLoggedIn = true;
-            User.getBalance(req.session.userId, function(err, balance) {
-                if(err || !user) {
-                    req.session.balance = null;
-                    next(); 
-                } else {
-                    req.session.balance = balance;
-                    next();
-                }
-            });
-        }
-    });
+    try {
+        req.session.user = await User.findOne({ _id: req.session.userId }).exec();
+    } catch(e) {
+        delete req.session.user;
+    }
+
+    next();
 });
 
 //Create socketIO server
@@ -94,16 +86,13 @@ io.use(function(socket, next) {
 });
 
 //On new socket connection:
-io.on('connection', function(socket){
-    User.validateId(socket.request.session.userId, function(err, user) {
-        if(err || !user) {
-            socket.request.session.isLoggedIn = false;
-        } else {
-            socket.request.session.isLoggedIn = true;
-            socket.request.session.username = user.username;
-        }
-        socket.request.session.save();
-    });
+io.on('connection', async function(socket){
+    try {
+        socket.request.session.user = await User.findOne({ _id: socket.request.session.userId }).exec();
+    } catch(e) {
+        delete socket.request.session.user;
+    }
+    socket.request.session.save();
 });
 
 app.io = io;

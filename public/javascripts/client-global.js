@@ -40,6 +40,11 @@ function throwErr(data) {
     }
 }
 
+socket.on('update-ui-res', function(data) {
+    console.log(data);
+    if(data.balance != null) $('#balance-text').text(data.balance);
+});
+
 socket.on('error-receive', function (data) {
     throwErr(data);
 });

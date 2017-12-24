@@ -1,11 +1,18 @@
-module.exports = function(io) {
-    var express = require('express');
-    var router = express.Router();
-    var User = require('mongoose').model('user');
+var express = require('express');
+var router = express.Router();
+var User = require('mongoose').model('user');
+var Promise = require('promise');
 
+
+module.exports = function(io) {
     const Roulette = {};
     Roulette.lastSpin = {};
-    Roulette.bets = [];
+    Roulette.bets = {};
+
+    Roulette.bets.green = [];
+    Roulette.bets.red = [];
+    Roulette.bets.black = [];
+
     Roulette.history = [];
 
     Roulette.spin = function() {
@@ -16,7 +23,36 @@ module.exports = function(io) {
         Roulette.history.push(Roulette.lastSpin.result);
 
         io.emit('roll-receive', Roulette.lastSpin);
-        //Work out winners etc.
+        Roulette.bets.reward(Roulette.lastSpin).then(() => {
+            console.log('Clearing... ');
+            Roulette.bets.clear();
+        });
+    }
+
+    Roulette.getColor = function(roll) {
+        if(roll === 0) return 'green';
+        return (roll % 2 === 0) ? 'black' : 'red';
+    }
+
+    Roulette.bets.reward = async function(roll) {
+        var winner = Roulette.getColor(roll);
+
+        if(Roulette.bets[winner].length === 0) return;
+
+        for(let i = 0; i < Roulette.bets[winner].length; i ++) {
+            var user = await User.findOne({_id: Roulette.bets[winner][i].id}).exec();
+            user.balance += Roulette.bets[winner][i].amount * (winner === 'green' ? 14 : 2);
+            var promise = user.save();
+            promise.then((user) => {
+                if(i === Roulette.bets[winner].length) return;
+            });
+        }
+    }
+
+    Roulette.bets.clear = function() {
+        Roulette.bets.green = [];
+        Roulette.bets.red = [];
+        Roulette.bets.black = [];
     }
 
     Roulette.interval = setInterval(Roulette.spin, 20000);
@@ -36,40 +72,49 @@ module.exports = function(io) {
         res.render('index', {title: 'CForce Roulette', session: req.session, injections: injections});
     });
 
-    io.on('connection', function(socket){
+    io.on('connection', function(socket){   
         //Server receiving a chat message
         socket.on('chat-send', function(msg){
-            if(socket.request.session.isLoggedIn) {
+            if(socket.request.session.user != null) {
                 msg = sanitiseMessage(msg);
                 if(msg == '') return;
-                io.emit('chat-receive', {from: socket.request.session.username, message: msg});
+                io.emit('chat-receive', {from: socket.request.session.user.username, message: msg});
             } else {
                 socket.emit('error-receive', {title: 'Not logged in!', body:'Please create an account and/or login to chat.', type:'warning'});
             }
 
         });
 
-        socket.on('bet-send', function(data) {
-            if(!socket.request.session.isLoggedIn) {
-                socket.emit('error-receive', {title: 'Not logged in!', body:'Please create an account and/or login to bet.', type:'warning'});
-                return;
+        socket.on('update-ui-req', async function(data) {
+            try {
+                socket.request.session.user = await User.findOne({ _id: socket.request.session.userId }).exec();
+                socket.emit('update-ui-res', {balance: socket.request.session.user == null ? 0 : socket.request.session.user.balance});
+            } catch(e) {
+                delete socket.request.session.user;
             }
+            socket.request.session.save();
+        });
 
-            if(data.bet !== 'red' && data.bet !== 'green' && data.bet !== 'black') {
-                socket.emit('error-receive', {title:'Invalid bet placed!', body:'Please try again after refreshing the page.', type:'danger'});
-                return;
-            };
+        socket.on('bet-send', async function(data) {
+            try {
+                socket.request.session.user = await User.findOne({ _id: socket.request.session.userId }).exec();
+                socket.emit('update-ui-res', {balance: socket.request.session.user == null ? 0 : socket.request.session.user.balance});
+            } catch(e) {
+                delete socket.request.session.user;
+            }
+            socket.request.session.save();
 
-            User.getBalance(socket.request.session.userId, function(err, balance) {
-                if(err || balance == null) {
-                    socket.emit('error-receive', {title:'Received error ' + error.name + '!', body:'Please contact us with this code: ' + error.code +'.', type:'danger'});
-                    return;
-                }
 
-                if(balance - data.amount < 0) {
-                    socket.emit('error-receive', {title:'Invalid bet placed!', body:'You have insufficient funds to place a bet of ' + data.amount + ' tokens.', type:'warning'});
-                    return;
-                }
+            if(socket.request.session.user == null) return socket.emit('error-receive', {title: 'Not logged in!', body:'Please create an account and/or login to bet.', type:'warning'});
+            if(data.bet !== 'red' && data.bet !== 'green' && data.bet !== 'black' && data.amount > 0 && data.amount % 1 === 0) return socket.emit('error-receive', {title:'Invalid bet placed!', body:'Please try again after refreshing the page.', type:'danger'});
+            if(socket.request.session.user.balance - data.amount < 0) return socket.emit('error-receive', {title:'Invalid bet placed!', body:'You have insufficient funds to place a bet of ' + data.amount + ' tokens.', type:'warning'});
+            
+            socket.request.session.user.balance -= data.amount;
+
+            var promise = socket.request.session.user.save();
+            promise.then((updatedUser) => {
+                Roulette.bets[data.bet].push({id: updatedUser._id, amount: data.amount});
+                return socket.emit('update-ui-res', {balance: updatedUser.balance});
             });
         });
     });
