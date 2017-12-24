@@ -12,13 +12,13 @@ var session = require('express-session');
 //Create app to export
 var app = express();
 
-app.set('trust proxy', 1);
-
+app.set('trust proxy', true);
 
 var sess = session({
     secret: 'seOOOSPAPSDwag167321320sdmSKRRRgucciGAngGG,',
     //Change cookie to {httpOnly: true, secure: false} for test and {httpOnly: true, secure: true} for prod
     cookie: {httpOnly: true, secure: true},
+    proxy: true,
     resave: true,
     saveUninitialized: true,
     store: new (require('express-sessions'))({
