@@ -20,6 +20,7 @@ html, body {
 
     align-items: center; 
     justify-content: center;
+    text-align: center;
 }
 
 .content-box {
@@ -102,6 +103,13 @@ html, body {
 
 .nav-padded {
     padding: 0.5rem;
+}
+
+@media (min-width: 576px) {
+    body {
+        display: flex;
+        flex-direction: column;
+    }
 }
 
 @media screen and (min-width: 992px) {

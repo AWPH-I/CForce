@@ -4,10 +4,11 @@ block stylesheets
     link(rel='stylesheet', href='/stylesheets/index.css')
     link(rel='stylesheet', href='/stylesheets/games/roulette.css')
 
-
 block scripts
-    script(src='/javascripts/client-index.js')
-    script(src='/javascripts/games/roulette.js')
+    script.
+        _.lastSpin = !{JSON.stringify(injections.lastSpin)};
+        _.serverTime = #{injections.injTime};
+        _.spinHistory = !{JSON.stringify(injections.history)};
 
 block content
     .container-fluid.flex-fill
@@ -21,17 +22,20 @@ block content
                                 #pointer
                             #roulette-history.flex-centre
                                 - for(var i = 0; i < 16; i++)
-                                    .roulette-history-slot
+                                    .roulette-history-slot.flex-centre
                         .row.flex-fill
                             .col-sm-4.flex-column
                                 button.btn.btn-danger.bet-btn(type='button', bet='red') Red (1 to 7)
                                 .content-box.flex-fill
+                                    ul.bet-content(bet='red')
                             .col-sm-4.flex-column
                                 button.btn.btn-success.bet-btn(type='button', bet='green') Green (0)
                                 .content-box.flex-fill
+                                    ul.bet-content(bet='green')
                             .col-sm-4.flex-column
                                 button.btn.btn-dark.bet-btn(type='button', bet='black') Black (8 to 14)
                                 .content-box.flex-fill
+                                    ul.bet-content(bet='black')
             .col-lg-4.flex-column.chat-column
                 .content-box.flex-fill#chat-box
                     ul#chat-content
@@ -40,11 +44,5 @@ block content
                     button.btn.btn-primary#chat-button(type='button', onClick='Chat.messageSend()') 
                         i.fa.fa-paper-plane(aria-hidden='true', style='margin-left: -4px;')
 
-    script.
-        Roulette.lastSpin = !{JSON.stringify(injections.lastSpin)};
-        _injTime = #{injections.injTime};
-
-        const x = !{JSON.stringify(injections.history)};
-        for(var i = 0; i < x.length; i ++) {
-            Roulette.history.add(x[i],0);
-        }
+    script(src='/javascripts/client-index.js')
+    script(src='/javascripts/games/roulette.js')

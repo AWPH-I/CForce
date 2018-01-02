@@ -1,9 +1,5 @@
 const Roulette = {};
 
-Roulette.current = 0;
-
-socket.emit('update-ui-req', null);
-
 Roulette.rollTo = function(num, time = 300, vary = true) {
     const rand = randRange(5,8);
     var real = (64 * (num - Roulette.current) + 960 * rand);
@@ -29,8 +25,10 @@ Roulette.rollTo = function(num, time = 300, vary = true) {
                 }, variance / (posOrNeg * 31) * 800, function () {
                     Roulette.hide();
                     Roulette.history.add(num);
+                    socket.emit('update-ui-req', null);
+                    Roulette.bets.clear();
+                    Roulette.resize();
             });
-            socket.emit('update-ui-req', null);
         } else {
             Roulette.hide();
         }
@@ -38,9 +36,7 @@ Roulette.rollTo = function(num, time = 300, vary = true) {
 }
 
 Roulette.resize = function() {
-    $('#roulette-wheel').css('background-position-x', $('#roulette-wheel').width() / 2 - 32);
-    Roulette.current = 0;
-    Roulette.rollTo(Roulette.lastSpin.result, 0, false);
+    $('#roulette-wheel').css('background-position-x', (($('#roulette-wheel').width() / 2 - 32) - 64 * Roulette.current));
 }
 
 Roulette.show = function() {
@@ -79,6 +75,47 @@ Roulette.clock.restart = function(set) {
 
 Roulette.history = {};
 
+Roulette.bets = {};
+
+Roulette.bets.display = function(data) {
+    const msg = document.createElement('li');
+    msg.className = 'chat-message bet-history-entry';
+
+    const img = document.createElement('img');
+    img.className = 'chat-avatar rounded-border';
+    $(img).attr('src','/images/placeholder-user.png');
+    $(msg).append(img);
+
+    const div = document.createElement('div');
+    div.className = 'flex-centre';
+    div.style = 'width: 100%;';
+    $(msg).append(div);
+
+    let p = document.createElement('p');
+    p.className = 'chat-text chat-username';
+    p.style = 'flex: 2 0 0;';
+    $(p).text(data.username);
+    $(div).append(p);
+
+    p = document.createElement('p');
+    p.className = 'chat-text';
+    p.style = 'flex: 1 0 0;';
+    $(p).text(data.amount);
+
+    const i = document.createElement('i');
+    i.className = 'fa fa-diamond';
+    i.ariaHidden = 'true';
+    i.style = 'margin-left: .2rem';
+    $(p).append(i);
+    $(div).append(p);
+
+    $('.bet-content[bet*="' + data.bet + '"]').append(msg);
+}
+
+Roulette.bets.clear = function () {
+    $('.bet-content').empty();
+}
+
 Roulette.history.add = function(roll, time = 500) {
     var cl;
     if(roll === 0) {
@@ -89,28 +126,30 @@ Roulette.history.add = function(roll, time = 500) {
         cl = '#E53935'; //Red
     }
     const slots = $('.roulette-history-slot');
-    for(var i = slots.length - 2; i >= 0; i --) {
+    for(let i = slots.length - 2; i >= 0; i --) {
         if($(slots[i]).css('background-color') !== 'rgba(0, 0, 0, 0)') {
             $(slots[i + 1]).animate({
                 backgroundColor: $(slots[i]).css('background-color')
-            }, {queue: false, duration: time, easing: 'easeInQuad'});
+            }, {queue: false, duration: time, easing: 'easeInQuad', done: function() {
+                if($(slots[i]).children()[0] != null) {
+                    $(slots[i + 1]).append($(slots[i]).children()[0]);
+                    $($(slots[i]).children()[0]).remove();
+                }
+            }});
         }
     }
 
+    $($(slots[slots.length - 1]).children()[0]).remove();
+
     $(slots[0]).animate({
         backgroundColor: cl
-    }, {queue: false, duration: time, easing:'easeInQuad'});
+    }, {queue: false, duration: time, easing:'easeInQuad', done: function() {
+        let p = document.createElement('p');
+        p.className = 'roulette-history-text';
+        $(p).text(roll);
+        $(slots[0]).append(p)
+    }});
 }
-
-$(document).ready(function() {
-    $('.bet-btn').click(function() {
-        socket.emit('bet-send', {bet: this.getAttribute('bet'), amount: 1} /* <-  credits go here*/);
-    });
-
-    Roulette.resize();
-    Roulette.clock.restart(Roulette.lastSpin.time + 20000 - _injTime);
-    Roulette.hide();
-});
 
 $(window).resize(function() {
     Roulette.resize();
@@ -122,3 +161,25 @@ socket.on('roll-receive', function(data) {
     Roulette.rollTo(data.result);
     Roulette.clock.restart();
 });
+
+socket.on('bet-receive', function(data) {
+    console.log(data);
+    Roulette.bets.display(data);
+});
+
+$('.bet-btn').click(function() {
+    socket.emit('bet-send', {bet: this.getAttribute('bet'), amount: 1} /* <-  credits go here*/);
+});
+
+//Injection handling
+Roulette.lastSpin = _.lastSpin;
+
+for(var i = 0; i < _.spinHistory.length; i ++) {
+    Roulette.history.add(_.spinHistory[i], 0);
+}
+
+Roulette.current = Roulette.lastSpin.result;
+
+Roulette.resize();
+Roulette.clock.restart(Roulette.lastSpin.time + 20000 - _.serverTime);
+Roulette.hide();

@@ -23,7 +23,7 @@ module.exports = function(io) {
         Roulette.history.push(Roulette.lastSpin.result);
 
         io.emit('roll-receive', Roulette.lastSpin);
-        Roulette.bets.reward(Roulette.lastSpin).then(() => {
+        Roulette.bets.reward(Roulette.lastSpin.result).then(() => {
             console.log('Clearing... ');
             Roulette.bets.clear();
         });
@@ -36,14 +36,15 @@ module.exports = function(io) {
 
     Roulette.bets.reward = async function(roll) {
         var winner = Roulette.getColor(roll);
+        console.log('Winner: ' + winner);
+        console.log(Roulette.bets[winner]);
 
         if(Roulette.bets[winner].length === 0) return;
 
         for(let i = 0; i < Roulette.bets[winner].length; i ++) {
             var user = await User.findOne({_id: Roulette.bets[winner][i].id}).exec();
             user.balance += Roulette.bets[winner][i].amount * (winner === 'green' ? 14 : 2);
-            var promise = user.save();
-            promise.then((user) => {
+            user.save().then((user) => {
                 if(i === Roulette.bets[winner].length) return;
             });
         }
@@ -111,9 +112,9 @@ module.exports = function(io) {
             
             socket.request.session.user.balance -= data.amount;
 
-            var promise = socket.request.session.user.save();
-            promise.then((updatedUser) => {
+            socket.request.session.user.save().then((updatedUser) => {
                 Roulette.bets[data.bet].push({id: updatedUser._id, amount: data.amount});
+                io.emit('bet-receive', {username: updatedUser.username, amount: data.amount, bet: data.bet});
                 return socket.emit('update-ui-res', {balance: updatedUser.balance});
             });
         });
