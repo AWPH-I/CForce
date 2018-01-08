@@ -1,38 +1,39 @@
 const Roulette = {};
 
-Roulette.rollTo = function(num, time = 300, vary = true) {
+Roulette.rollTo = function(num, time = 300) {
+    if(Roulette.rolling) {
+        $('#roulette-wheel').stop(false, true);
+        $('#roulette-wheel').stop(false, true);
+        return Roulette.rollTo(num, time);
+    }
+
+    Roulette.rolling = true;
     const rand = randRange(5,8);
     var real = (64 * (num - Roulette.current) + 960 * rand);
     
-    let endUp, posOrNeg, variance;
+    var endUp = Number($('#roulette-wheel').css('background-position-x').split('px')[0]) - real;
+    var posOrNeg = (Math.floor(Math.random() * (2 - 1 + 1)) + 1 == 1 ? 1 : -1);
+    var variance = (posOrNeg * Math.random() * 31);
 
-    if(vary) {
-        endUp = Number($('#roulette-wheel').css('background-position-x').split('px')[0]) - real;
-        posOrNeg = (Math.floor(Math.random() * (2 - 1 + 1)) + 1 == 1 ? 1 : -1);
-        variance = (posOrNeg * Math.random() * 31);
-
-        real += variance;
-        Roulette.show();
-    }
+    real += variance;
+    Roulette.show();
 
     $('#roulette-wheel').animate({
         backgroundPositionX: '-=' + real
-    }, rand * time * 3.5, 'easeOutExpo', function () {
+    }, {duration: rand * time * 3.5, easing: 'easeOutExpo', done: function () {
         Roulette.current = num;
-        if(vary) {
-            $('#roulette-wheel').animate({
-                backgroundPositionX: endUp
-                }, variance / (posOrNeg * 31) * 800, function () {
-                    Roulette.hide();
-                    Roulette.history.add(num);
-                    socket.emit('update-ui-req', null);
-                    Roulette.bets.clear();
-                    Roulette.resize();
-            });
-        } else {
-            Roulette.hide();
-        }
-    });
+        $('#roulette-wheel').animate({
+            backgroundPositionX: endUp
+            }, variance / (posOrNeg * 31) * 600, function () {
+                Roulette.hide();
+                Roulette.history.add(num);
+                socket.emit('update-ui-req', null);
+                Roulette.bets.clear();
+                Roulette.resize();
+                Roulette.rolling = false;
+        });
+    }});
+
 }
 
 Roulette.resize = function() {
@@ -62,7 +63,7 @@ Roulette.clock.format = function(n) {
 
 Roulette.clock.restart = function(set) {
     clearInterval(Roulette.clock.interval);
-    Roulette.clock.counter = (set == null ? 20000 : set);
+    Roulette.clock.counter = (set == null ? 30000 : set);
     Roulette.clock.interval = setInterval(function() {
         Roulette.clock.counter -= 10;
         $('.countdown-clock').text(Roulette.clock.format(Roulette.clock.counter));
@@ -116,39 +117,39 @@ Roulette.bets.clear = function () {
     $('.bet-content').empty();
 }
 
-Roulette.history.add = function(roll, time = 500) {
-    var cl;
-    if(roll === 0) {
-        cl = '#43A047'; //Green
+Roulette.getColor = function(roll) {
+     if(roll === 0) {
+        return 'green';
     } else if(roll % 2 === 0) {
-        cl = '#212121'; //Black
+        return 'black';
     } else if(roll % 2 !== 0) {
-        cl = '#E53935'; //Red
-    }
-    const slots = $('.roulette-history-slot');
-    for(let i = slots.length - 2; i >= 0; i --) {
-        if($(slots[i]).css('background-color') !== 'rgba(0, 0, 0, 0)') {
-            $(slots[i + 1]).animate({
-                backgroundColor: $(slots[i]).css('background-color')
-            }, {queue: false, duration: time, easing: 'easeInQuad', done: function() {
-                if($(slots[i]).children()[0] != null) {
-                    $(slots[i + 1]).append($(slots[i]).children()[0]);
-                    $($(slots[i]).children()[0]).remove();
-                }
-            }});
-        }
-    }
+        return 'red';
+    }   
+}
 
-    $($(slots[slots.length - 1]).children()[0]).remove();
+Roulette.history.add = function(roll, animate = true) {
+    const slots = $('.roulette-history-slot:not(.bounceOut)');
 
-    $(slots[0]).animate({
-        backgroundColor: cl
-    }, {queue: false, duration: time, easing:'easeInQuad', done: function() {
-        let p = document.createElement('p');
-        p.className = 'roulette-history-text';
-        $(p).text(roll);
-        $(slots[0]).append(p)
-    }});
+    const cache = $($(slots[slots.length - 1]));
+
+    const newSlot = document.createElement('div');
+    newSlot.className = 'roulette-history-slot flex-centre';
+    newSlot.style.backgroundColor = 'var(--cl-rl-' + Roulette.getColor(roll) + ')';
+    const text = document.createElement('p');
+    $(text).text(roll); 
+    text.className = 'roulette-history-text';
+    $(newSlot).append(text);
+
+    if(animate) {
+        newSlot.className = newSlot.className + ' animated bounceIn';
+        cache.animateCss('bounceOut', function() {
+            cache.remove();
+            $('#roulette-history').prepend(newSlot);
+        });
+    } else {
+        cache.remove();
+        $('#roulette-history').prepend(newSlot);
+    }
 }
 
 $(window).resize(function() {
@@ -157,29 +158,33 @@ $(window).resize(function() {
 
 
 socket.on('roll-receive', function(data) {
+    console.log('Roll received @ ' + new Date(data.time));
     Roulette.lastSpin = data;
     Roulette.rollTo(data.result);
     Roulette.clock.restart();
 });
 
 socket.on('bet-receive', function(data) {
-    console.log(data);
     Roulette.bets.display(data);
 });
 
 $('.bet-btn').click(function() {
-    socket.emit('bet-send', {bet: this.getAttribute('bet'), amount: 1} /* <-  credits go here*/);
+    socket.emit('bet-send', {bet: this.getAttribute('bet'), amount: $('#bet-input').val()} /* <-  credits go here*/);
 });
 
 //Injection handling
 Roulette.lastSpin = _.lastSpin;
 
 for(var i = 0; i < _.spinHistory.length; i ++) {
-    Roulette.history.add(_.spinHistory[i], 0);
+    Roulette.history.add(_.spinHistory[i], false);
 }
 
 Roulette.current = Roulette.lastSpin.result;
 
 Roulette.resize();
-Roulette.clock.restart(Roulette.lastSpin.time + 20000 - _.serverTime);
+Roulette.clock.restart(Roulette.lastSpin.time + 30000 - _.serverTime);
 Roulette.hide();
+
+$('.bet-amnt-btn').click(function(e) {
+    $('#bet-input').val(e.currentTarget.innerHTML);
+});
