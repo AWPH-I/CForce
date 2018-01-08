@@ -16,6 +16,7 @@ module.exports = function(io) {
     Roulette.history = [];
 
     Roulette.spin = function() {
+        console.log('Spun at ' + new Date());
         Roulette.lastSpin.result = Math.floor(Math.random() * (14 - 0 + 1));
         Roulette.lastSpin.time = new Date().getTime();
 
@@ -36,8 +37,7 @@ module.exports = function(io) {
 
     Roulette.bets.reward = async function(roll) {
         var winner = Roulette.getColor(roll);
-        console.log('Winner: ' + winner);
-        console.log(Roulette.bets[winner]);
+        console.log('Winner: ' + roll + ' ' + winner);
 
         if(Roulette.bets[winner].length === 0) return;
 
@@ -56,7 +56,7 @@ module.exports = function(io) {
         Roulette.bets.black = [];
     }
 
-    Roulette.interval = setInterval(Roulette.spin, 20000);
+    Roulette.interval = setInterval(Roulette.spin, 30000);
     Roulette.spin();
 
     function sanitiseMessage(text) {
@@ -105,9 +105,11 @@ module.exports = function(io) {
             }
             socket.request.session.save();
 
+            data.amount = Number(data.amount);       
+            if(isNaN(data.amount)) return socket.emit('error-receive', {title: 'Invalid bet!', body:'Please try placing your bet again.', type:'warning'});
 
             if(socket.request.session.user == null) return socket.emit('error-receive', {title: 'Not logged in!', body:'Please create an account and/or login to bet.', type:'warning'});
-            if(data.bet !== 'red' && data.bet !== 'green' && data.bet !== 'black' && data.amount > 0 && data.amount % 1 === 0) return socket.emit('error-receive', {title:'Invalid bet placed!', body:'Please try again after refreshing the page.', type:'danger'});
+            if(data.bet !== 'red' && data.bet !== 'green' && data.bet !== 'black' || data.amount <= 0 || data.amount % 1 !== 0) return socket.emit('error-receive', {title:'Invalid bet placed!', body:'Please try again after refreshing the page.', type:'danger'});
             if(socket.request.session.user.balance - data.amount < 0) return socket.emit('error-receive', {title:'Invalid bet placed!', body:'You have insufficient funds to place a bet of ' + data.amount + ' tokens.', type:'warning'});
             
             socket.request.session.user.balance -= data.amount;
