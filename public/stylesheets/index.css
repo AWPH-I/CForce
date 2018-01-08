@@ -67,7 +67,8 @@
 
     margin-bottom: 20px;
 
-    background-color: var(--cl-off-white);
+    border: 1px solid transparent;
+    border-color: var(--cl-carbon);
 }
 
 #chat-button {
