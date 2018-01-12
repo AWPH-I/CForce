@@ -13,6 +13,14 @@ html
         script(src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js", integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=", crossorigin="anonymous")
         script(src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js')
         script(src='/javascripts/client-global.js')
+        script.
+            const injections = !{JSON.stringify(injections)};
+
+            for (var key in injections) {
+                if (!injections.hasOwnProperty(key)) continue;
+
+                _[key] = injections[key];
+            }
         block scripts
 
         link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css', integrity='sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb', crossorigin='anonymous')
@@ -22,7 +30,7 @@ html
         block stylesheets
     
     body
-        nav.navbar.navbar-expand-lg.navbar-light.sticky-top(style='background-color: var(--cl-solitude); z-index: 20000;')
+        nav.navbar.navbar-expand-lg.navbar-light.sticky-top(style='background-color: var(--cl-solitude); z-index: 20000; min-height: fit-content;')
             a.navbar-brand.nav-padded(href='#') Hi-Roller
             button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
                 span.navbar-toggler-icon

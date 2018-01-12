@@ -4,12 +4,6 @@ block stylesheets
     link(rel='stylesheet', href='/stylesheets/index.css')
     link(rel='stylesheet', href='/stylesheets/games/roulette.css')
 
-block scripts
-    script.
-        _.lastSpin = !{JSON.stringify(injections.lastSpin)};
-        _.serverTime = #{injections.injTime};
-        _.spinHistory = !{JSON.stringify(injections.history)};
-
 block content
     .container-fluid.flex-fill
         .row.fill

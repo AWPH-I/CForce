@@ -79,6 +79,12 @@ Roulette.history = {};
 Roulette.bets = {};
 
 Roulette.bets.display = function(data) {
+    var box = $('.bet-content[bet*="' + data.bet + '"]').find('.chat-username:contains("' + data.username + '")').closest('li');
+    if(box.length > 0) {
+        var current = $(box.children('.flex-centre').children('.chat-text').children('.amount')).text();
+        return $(box.children('.flex-centre').children('.chat-text').children('.amount')).text(Number(current) + data.amount);
+    }
+
     const msg = document.createElement('li');
     msg.className = 'chat-message bet-history-entry';
 
@@ -101,7 +107,11 @@ Roulette.bets.display = function(data) {
     p = document.createElement('p');
     p.className = 'chat-text';
     p.style = 'flex: 1 0 0;';
-    $(p).text(data.amount);
+
+    const span = document.createElement('span');
+    span.className = 'amount';
+    $(span).text(data.amount);
+    $(p).append(span);
 
     const i = document.createElement('i');
     i.className = 'fa fa-diamond';
@@ -175,14 +185,18 @@ $('.bet-btn').click(function() {
 //Injection handling
 Roulette.lastSpin = _.lastSpin;
 
-for(var i = 0; i < _.spinHistory.length; i ++) {
-    Roulette.history.add(_.spinHistory[i], false);
+for(var i = 0; i < _.history.length; i ++) {
+    Roulette.history.add(_.history[i], false);
+}
+
+for(var i = 0; i < _.bets.length; i ++) {
+    Roulette.bets.display(_.bets[i]);
 }
 
 Roulette.current = Roulette.lastSpin.result;
 
 Roulette.resize();
-Roulette.clock.restart(Roulette.lastSpin.time + 30000 - _.serverTime);
+Roulette.clock.restart(Roulette.lastSpin.time + 30000 - _.injTime);
 Roulette.hide();
 
 $('.bet-amnt-btn').click(function(e) {

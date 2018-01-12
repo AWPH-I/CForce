@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var User = require('mongoose').model('user');
-var Promise = require('promise');
 
 
 module.exports = function(io) {
@@ -12,6 +11,8 @@ module.exports = function(io) {
     Roulette.bets.green = [];
     Roulette.bets.red = [];
     Roulette.bets.black = [];
+
+    Roulette.publicBets = [];
 
     Roulette.history = [];
 
@@ -54,6 +55,8 @@ module.exports = function(io) {
         Roulette.bets.green = [];
         Roulette.bets.red = [];
         Roulette.bets.black = [];
+
+        Roulette.publicBets = [];
     }
 
     Roulette.interval = setInterval(Roulette.spin, 30000);
@@ -69,7 +72,7 @@ module.exports = function(io) {
 
     /* GET home page. */
     router.get('/', function(req, res, next) {
-        const injections = {lastSpin: Roulette.lastSpin, injTime: new Date().getTime(), history: Roulette.history}
+        const injections = {lastSpin: Roulette.lastSpin, injTime: new Date().getTime(), history: Roulette.history, bets: Roulette.publicBets};
         res.render('index', {title: 'CForce Roulette', session: req.session, injections: injections});
     });
 
@@ -115,7 +118,19 @@ module.exports = function(io) {
             socket.request.session.user.balance -= data.amount;
 
             socket.request.session.user.save().then((updatedUser) => {
-                Roulette.bets[data.bet].push({id: updatedUser._id, amount: data.amount});
+                const lookup = Roulette.bets[data.bet].find((y) => { return String(y.id) === String(socket.request.session.userId); });
+                if(lookup != null) {
+                    var index = Roulette.bets[data.bet].indexOf(lookup);
+                    Roulette.bets[data.bet][index].amount += data.amount;
+                    var entry = Roulette.publicBets.find((y) => {
+                        return y.username === socket.request.session.user.username;
+                    });
+                    Roulette.publicBets[Roulette.publicBets.indexOf(entry)].amount += data.amount;
+                } else {
+                    Roulette.bets[data.bet].push({id: updatedUser._id, amount: data.amount});
+                    Roulette.publicBets.push({username: updatedUser.username, amount: data.amount, bet: data.bet});
+                }
+                console.log('xxx');
                 io.emit('bet-receive', {username: updatedUser.username, amount: data.amount, bet: data.bet});
                 return socket.emit('update-ui-res', {balance: updatedUser.balance});
             });
