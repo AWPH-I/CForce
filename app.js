@@ -99,7 +99,7 @@ app.io = io;
 
 
 // routes
-app.use('/', require('./routes/index')(io));
+app.use('/', require('./routes/games/roulette')(io));
 app.use('/imprint', require('./routes/imprint'));
 
 app.use('/login', require('./routes/login'));

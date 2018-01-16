@@ -1,0 +1,23 @@
+extends layout
+
+block stylesheets
+    link(rel='stylesheet', href='/stylesheets/game.css')
+
+block content
+    .container-fluid.flex-fill
+        .row.fill
+            .col-lg-8.roulette-column
+                block game-content
+
+            .col-lg-4.flex-column.chat-column
+                .content-box.flex-fill#chat-box
+                    ul#chat-content
+                
+                .input-group(style='width: 100%;')
+                    input.form-control(type='text', id='chat-input', maxlength='256', onkeydown='if(event.keyCode == 13) $("#chat-button").click();')
+                    button.btn.btn-primary#chat-button(type='button', onClick='Chat.messageSend()') 
+                        i.fa.fa-paper-plane(aria-hidden='true', style='margin-left: -4px;')
+
+    script(src='/javascripts/client-game.js')
+
+    block game-scripts

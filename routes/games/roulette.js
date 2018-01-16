@@ -73,7 +73,8 @@ module.exports = function(io) {
     /* GET home page. */
     router.get('/', function(req, res, next) {
         const injections = {lastSpin: Roulette.lastSpin, injTime: new Date().getTime(), history: Roulette.history, bets: Roulette.publicBets};
-        res.render('index', {title: 'CForce Roulette', session: req.session, injections: injections});
+        console.log(req.session);
+        res.render('roulette', {title: 'CForce Roulette', session: req.session, injections: injections});
     });
 
     io.on('connection', function(socket){   

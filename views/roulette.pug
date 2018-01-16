@@ -1,0 +1,44 @@
+extends game
+
+append stylesheets
+    link(rel='stylesheet', href='/stylesheets/games/roulette.css')
+
+block game-content
+    .flex-column.fill
+        .content-box.flex-centre.flex-column(style='height: 150px; overflow-x: hidden;')
+            #roulette-wheel
+                .countdown-sheath(style='border-radius: 20rem; display: none;')
+                    p.countdown-clock 
+                #pointer
+            #roulette-history.flex-centre
+                - for(var i = 0; i < 16; i++)
+                    .roulette-history-slot.flex-centre
+        .content-box.flex-row(style='margin-top: 0;')
+            .btn-group.mr-2.btn-group-justified(role='group', aria-label='First group')
+                button.btn.bet-amnt-btn(type='button') 10
+                button.btn.bet-amnt-btn(type='button') 50
+                button.btn.bet-amnt-btn(type='button') 100
+                button.btn.bet-amnt-btn(type='button') 500
+                button.btn.bet-amnt-btn(type='button') 1000
+                button.btn.bet-amnt-btn(type='button') 5000
+            .input-group
+                span#btnGroupAddon.input-group-addon Bet:
+                input.form-control#bet-input(type='number', value='1', min='1', aria-describedby='btnGroupAddon')
+                span#btnGroupAddon.input-group-addon #[i.fa.fa-diamond]  
+
+        .row.flex-fill
+            .col-sm-4.flex-column
+                button.btn.cl-rl-red.bet-btn(type='button', bet='red') Red (1 to 7)
+                .content-box.flex-fill
+                    ul.bet-content(bet='red')
+            .col-sm-4.flex-column
+                button.btn.cl-rl-green.bet-btn(type='button', bet='green') Green (0)
+                .content-box.flex-fill
+                    ul.bet-content(bet='green')
+            .col-sm-4.flex-column
+                button.btn.cl-rl-black.bet-btn(type='button', bet='black') Black (8 to 14)
+                .content-box.flex-fill
+                        ul.bet-content(bet='black')
+
+block game-scripts
+    script(src='/javascripts/games/roulette.js')
