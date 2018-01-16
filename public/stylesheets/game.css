@@ -81,3 +81,15 @@
     border-bottom-right-radius: 2rem;
     border-top-right-radius: 2rem;
 }
+
+.flying-diamond {
+    position: fixed;
+    transform: translate(-50%, -50%);
+    z-index: 20001;
+}
+
+@media screen and (max-width: 992px) {
+    #chat-box {
+        height: 50vh;
+    }
+}

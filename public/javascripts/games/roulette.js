@@ -64,8 +64,10 @@ Roulette.clock.format = function(n) {
 Roulette.clock.restart = function(set) {
     clearInterval(Roulette.clock.interval);
     Roulette.clock.counter = (set == null ? 30000 : set);
+    Roulette.clock.tk = Date.now();
     Roulette.clock.interval = setInterval(function() {
-        Roulette.clock.counter -= 10;
+        Roulette.clock.counter -= Date.now() - Roulette.clock.tk;
+        Roulette.clock.tk = Date.now();
         $('.countdown-clock').text(Roulette.clock.format(Roulette.clock.counter));
         if(Roulette.clock.counter <= 0) {
             Roulette.clock.stop();
@@ -179,7 +181,31 @@ socket.on('bet-receive', function(data) {
 });
 
 $('.bet-btn').click(function() {
-    socket.emit('bet-send', {bet: this.getAttribute('bet'), amount: $('#bet-input').val()} /* <-  credits go here*/);
+    socket.emit('bet-send', {bet: this.getAttribute('bet'), amount: $('#bet-input').val()});
+    new Audio('sounds/ding.mp3').play();
+
+    var rect = this.getBoundingClientRect();
+    var gx = rect.left + (rect.width * Math.random());
+    var gy = rect.top + rect.height / 2;
+
+    var from = $('.credit-icon')[0].getBoundingClientRect();
+    var fx = from.left + from.width / 2;
+    var fy = from.top + from.height / 2;
+    var el;
+    for(let i = 0; i < Math.ceil($('#bet-input').val() / 10) * 10; i ++) {
+        el = document.createElement('i');
+        el.className = 'fa fa-diamond flying-diamond';
+        el.style.left = fx + 'px';
+        el.style.top = fy + 'px';
+        $('body').append(el);
+        $(el).animate({
+            left: gx + 'px',
+            top: gy + 'px'
+        }, {duration: randRange(50,500), easing: 'easeInCubic', done: function() {
+            $(this).remove();
+        }});
+        gx = rect.left + (rect.width * Math.random()); 
+    }
 });
 
 //Injection handling

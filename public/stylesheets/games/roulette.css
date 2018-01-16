@@ -10,6 +10,19 @@
     border-radius: 2rem;
     border: 1px solid transparent;
     border-color: var(--cl-carbon);
+
+    transition: background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    user-select: none;
+
+    z-index: 10910101010;
+}
+
+.bet-btn:hover {
+    box-shadow: 0 0 5px #888888;
+}
+
+.bet-btn:focus {
+    outline: 0;
 }
 
 .bet-content {
@@ -31,6 +44,7 @@
 #bet-input {
     border: 1px solid transparent;
     border-color: var(--cl-carbon);
+    min-width: 200px;
 }
 
 .countdown-sheath {
@@ -61,18 +75,17 @@
     position: relative;
 }
 
-#roulette-history {
-    height: 32px;
-    width: 70%;    
+#roulette-history {  
     position: relative;
-
     margin-top: 20px;
+    flex-wrap: wrap;
 }
 
 .roulette-history-slot {
     height: 28px;
     width: 28px;
 
+    margin-top: 2px;
     margin-left: 2px;
     margin-right: 2px;
 
@@ -91,4 +104,20 @@
     height: 100%;
     background-color: black;
     margin: auto auto;
+}
+
+#bet-controls {
+    flex-wrap: wrap;
+    margin-top: 0;
+    justify-content: center;
+    align-items: center;
+    padding: .75rem;
+}
+
+#bet-btn-group {
+    margin: .5rem;
+}
+
+#bet-input-group {
+    flex: 1;
 }

@@ -1,7 +1,7 @@
 var Chat = {};
 
 
-Chat.box = $('#chat-box')[0];
+Chat.box = $('#chat-box');
 Chat.content = $('#chat-content');
 Chat.input = $('#chat-input');
 
