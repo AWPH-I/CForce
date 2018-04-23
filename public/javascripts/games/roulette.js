@@ -192,7 +192,10 @@ gameSocket.on('bet-approve', function(data) {
     var fx = from.left + from.width / 2;
     var fy = from.top + from.height / 2;
     var el;
-    for(let i = 0; i < Math.ceil($('#bet-input').val() / 10) * 10; i ++) {
+
+    var num = Math.ceil($('#bet-input').val() / 10) * 10;
+    if(num > 100) num = 100;
+    for(let i = 0; i < num; i ++) {
         el = document.createElement('i');
         el.className = 'fa fa-diamond flying-diamond';
         el.style.left = fx + 'px';
