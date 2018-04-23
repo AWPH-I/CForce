@@ -1,6 +1,5 @@
 var Chat = {};
 
-
 Chat.box = $('#chat-box');
 Chat.content = $('#chat-content');
 Chat.input = $('#chat-input');
@@ -18,7 +17,7 @@ Chat.messageReceive = function(data) {
     div.className = 'flex-column';
     $(msg).append(div);
 
-    let p = document.createElement('p');
+    var p = document.createElement('p');
     p.className = 'chat-text chat-username';
     $(p).text(data.from);
     $(div).append(p);
@@ -34,11 +33,14 @@ Chat.messageReceive = function(data) {
 }
 
 Chat.messageSend = function() {
-    socket.emit('chat-send', Chat.input.val());
+    gamesSocket.emit('chat-send', Chat.input.val());
     Chat.input.val('');
 }
 
-socket.on('chat-receive', function (data) {
+gamesSocket.on('chat-receive', function (data) {
+    console.log(data);
     Chat.messageReceive(data);
 });
+
+var Utils = {};
 

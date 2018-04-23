@@ -3,7 +3,15 @@ extends layout
 block stylesheets
     link(rel='stylesheet', href='/stylesheets/game.css')
 
+append sockets
+    script.
+        var gamesSocket = io('/games');
+        var gameSocket;
+        sockets.push(gamesSocket);
+
 block content
+    script.
+        sockets.push(gameSocket);
     .container-fluid.flex-fill
         .row.fill
             .col-lg-8.roulette-column
@@ -18,6 +26,6 @@ block content
                     button.btn.btn-primary#chat-button(type='button', onClick='Chat.messageSend()') 
                         i.fa.fa-paper-plane(aria-hidden='true', style='margin-left: -4px;')
 
-    script(src='/javascripts/client-game.js')
+    script(src='/javascripts/game.js')
 
     block game-scripts

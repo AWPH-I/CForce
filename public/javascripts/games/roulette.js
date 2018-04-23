@@ -27,7 +27,7 @@ Roulette.rollTo = function(num, time = 300) {
             }, variance / (posOrNeg * 31) * 600, function () {
                 Roulette.hide();
                 Roulette.history.add(num);
-                socket.emit('update-ui-req', null);
+                mainSocket.emit('update-ui-req', null);
                 Roulette.bets.clear();
                 Roulette.resize();
                 Roulette.rolling = false;
@@ -169,22 +169,22 @@ $(window).resize(function() {
 });
 
 
-socket.on('roll-receive', function(data) {
+gameSocket.on('roll-receive', function(data) {
     console.log('Roll received @ ' + new Date(data.time));
     Roulette.lastSpin = data;
     Roulette.rollTo(data.result);
     Roulette.clock.restart();
 });
 
-socket.on('bet-receive', function(data) {
+gameSocket.on('bet-receive', function(data) {
+    console.log(data);
     Roulette.bets.display(data);
 });
 
-$('.bet-btn').click(function() {
-    socket.emit('bet-send', {bet: this.getAttribute('bet'), amount: $('#bet-input').val()});
+gameSocket.on('bet-approve', function(data) {
     new Audio('sounds/ding.mp3').play();
 
-    var rect = this.getBoundingClientRect();
+    var rect = $('.bet-btn[bet="' + data + '"]')[0].getBoundingClientRect();
     var gx = rect.left + (rect.width * Math.random());
     var gy = rect.top + rect.height / 2;
 
@@ -206,6 +206,10 @@ $('.bet-btn').click(function() {
         }});
         gx = rect.left + (rect.width * Math.random()); 
     }
+});
+
+$('.bet-btn').click(function() {
+    gameSocket.emit('bet-send', {bet: this.getAttribute('bet'), amount: $('#bet-input').val()});
 });
 
 //Injection handling

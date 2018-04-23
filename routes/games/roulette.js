@@ -2,20 +2,53 @@ var express = require('express');
 var router = express.Router();
 var User = require('mongoose').model('user');
 
+const Roulette = {};
+Roulette.lastSpin = {};
+Roulette.bets = {};
 
-module.exports = function(io) {
-    const Roulette = {};
-    Roulette.lastSpin = {};
-    Roulette.bets = {};
+Roulette.bets.green = [];
+Roulette.bets.red = [];
+Roulette.bets.black = [];
 
+Roulette.publicBets = [];
+
+Roulette.history = [];
+
+Roulette.getColor = function(roll) {
+    if(roll === 0) return 'green';
+    return (roll % 2 === 0) ? 'black' : 'red';
+}
+
+Roulette.bets.reward = async function(roll) {
+    var winner = Roulette.getColor(roll);
+    console.log('Winner: ' + roll + ' ' + winner);
+
+    if(Roulette.bets[winner].length === 0) return;
+
+    for(let i = 0; i < Roulette.bets[winner].length; i ++) {
+        var user = await User.findOne({_id: Roulette.bets[winner][i].id}).exec();
+        user.balance += Roulette.bets[winner][i].amount * (winner === 'green' ? 14 : 2);
+        user.save().then((user) => {
+            if(i === Roulette.bets[winner].length) return;
+        });
+    }
+}
+
+Roulette.bets.clear = function() {
     Roulette.bets.green = [];
     Roulette.bets.red = [];
     Roulette.bets.black = [];
 
     Roulette.publicBets = [];
+}
 
-    Roulette.history = [];
+router.get('/', function(req, res, next) {
+    const injections = {lastSpin: Roulette.lastSpin, injTime: new Date().getTime(), history: Roulette.history, bets: Roulette.publicBets};
+    res.render('roulette', {title: 'Roulette', session: req.session, injections: injections});
+});
 
+
+module.exports = function(io) {
     Roulette.spin = function() {
         console.log('Spun at ' + new Date());
         Roulette.lastSpin.result = Math.floor(Math.random() * (14 - 0 + 1));
@@ -31,75 +64,10 @@ module.exports = function(io) {
         });
     }
 
-    Roulette.getColor = function(roll) {
-        if(roll === 0) return 'green';
-        return (roll % 2 === 0) ? 'black' : 'red';
-    }
-
-    Roulette.bets.reward = async function(roll) {
-        var winner = Roulette.getColor(roll);
-        console.log('Winner: ' + roll + ' ' + winner);
-
-        if(Roulette.bets[winner].length === 0) return;
-
-        for(let i = 0; i < Roulette.bets[winner].length; i ++) {
-            var user = await User.findOne({_id: Roulette.bets[winner][i].id}).exec();
-            user.balance += Roulette.bets[winner][i].amount * (winner === 'green' ? 14 : 2);
-            user.save().then((user) => {
-                if(i === Roulette.bets[winner].length) return;
-            });
-        }
-    }
-
-    Roulette.bets.clear = function() {
-        Roulette.bets.green = [];
-        Roulette.bets.red = [];
-        Roulette.bets.black = [];
-
-        Roulette.publicBets = [];
-    }
-
     Roulette.interval = setInterval(Roulette.spin, 30000);
     Roulette.spin();
 
-    function sanitiseMessage(text) {
-        text = (String(text));
-        if(text.length > 256) {
-            text = text.substring(0,255) + '...';
-        }
-        return text;
-    }
-
-    /* GET home page. */
-    router.get('/', function(req, res, next) {
-        const injections = {lastSpin: Roulette.lastSpin, injTime: new Date().getTime(), history: Roulette.history, bets: Roulette.publicBets};
-        console.log(req.session);
-        res.render('roulette', {title: 'CForce Roulette', session: req.session, injections: injections});
-    });
-
-    io.on('connection', function(socket){   
-        //Server receiving a chat message
-        socket.on('chat-send', function(msg){
-            if(socket.request.session.user != null) {
-                msg = sanitiseMessage(msg);
-                if(msg == '') return;
-                io.emit('chat-receive', {from: socket.request.session.user.username, message: msg});
-            } else {
-                socket.emit('error-receive', {title: 'Not logged in!', body:'Please create an account and/or login to chat.', type:'warning'});
-            }
-
-        });
-
-        socket.on('update-ui-req', async function(data) {
-            try {
-                socket.request.session.user = await User.findOne({ _id: socket.request.session.userId }).exec();
-                socket.emit('update-ui-res', {balance: socket.request.session.user == null ? 0 : socket.request.session.user.balance});
-            } catch(e) {
-                delete socket.request.session.user;
-            }
-            socket.request.session.save();
-        });
-
+    io.on('connection', function(socket){ 
         socket.on('bet-send', async function(data) {
             try {
                 socket.request.session.user = await User.findOne({ _id: socket.request.session.userId }).exec();
@@ -131,8 +99,10 @@ module.exports = function(io) {
                     Roulette.bets[data.bet].push({id: updatedUser._id, amount: data.amount});
                     Roulette.publicBets.push({username: updatedUser.username, amount: data.amount, bet: data.bet});
                 }
-                console.log('xxx');
+
                 io.emit('bet-receive', {username: updatedUser.username, amount: data.amount, bet: data.bet});
+                socket.emit('bet-approve', data.bet);
+
                 return socket.emit('update-ui-res', {balance: updatedUser.balance});
             });
         });

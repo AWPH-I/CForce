@@ -12,7 +12,11 @@ html
         script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
         script(src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js", integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=", crossorigin="anonymous")
         script(src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js')
-        script(src='/javascripts/client-global.js')
+        block sockets
+            script.
+                var mainSocket = io();
+                const sockets = [mainSocket];
+        script(src='/javascripts/global.js')
         script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js', integrity='sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh' crossorigin='anonymous')
         script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js', integrity='sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ', crossorigin='anonymous')
         script.
@@ -24,7 +28,6 @@ html
                 _[key] = injections[key];
             }
         block scripts
-
         link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css', integrity='sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb', crossorigin='anonymous')
         link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
         link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css', integrity='sha384-OHBBOqpYHNsIqQy8hL1U+8OXf9hH6QRxi0+EODezv82DfnZoV7qoHAZDwMwEJvSw', crossorigin='anonymous')
@@ -40,7 +43,7 @@ html
                 ul.nav.navbar-nav.mr-auto
                     li.nav-item
                         a.nav-link(href='/') Home
-                    if session.user
+                    if session && session.user
                         li.nav-item
                             a.nav-link(href='/profile') Profile
                     else
@@ -51,13 +54,13 @@ html
                     li.nav-item
                         .nav-padded
                             .rounded-border.credit-container
-                                if session.user
+                                if session && session.user
                                     p#balance-text(style='margin: 0; padding-right: 34px;') #{session.user.balance}
                                 else
                                     p#balance-text(style='margin: 0; padding-right: 34px;') 0
                                 i.credit-icon.fa.fa-diamond(aria-hidden='true')
 
-                    if session.user
+                    if session && session.user
                         li.nav-item
                             .nav-padded
                                 a.btn.logout-btn.btn-outline-danger(href='/logout', role='button') Log Out

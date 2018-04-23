@@ -3,6 +3,10 @@ extends game
 append stylesheets
     link(rel='stylesheet', href='/stylesheets/games/roulette.css')
 
+append sockets
+    script.
+        gameSocket = io('/roulette');
+
 block game-content
     .flex-column.fill
         .content-box.flex-centre.flex-column(style='height: fit-content;')

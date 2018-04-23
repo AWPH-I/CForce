@@ -1,5 +1,3 @@
-var socket = io();
-
 const _ = {};
 
 $.fn.extend({
@@ -42,11 +40,15 @@ function throwErr(data) {
     }
 }
 
-socket.on('update-ui-res', function(data) {
+//Only the main socket can handle ui
+mainSocket.on('update-ui-res', function(data) {
     console.log(data);
     if(data.balance != null) $('#balance-text').text(data.balance);
 });
 
-socket.on('error-receive', function (data) {
-    throwErr(data);
+//Allows all sockets to send errors to the handler
+sockets.map(function(e){
+    e.on('error-receive', function (data) {
+        throwErr(data);
+    })
 });

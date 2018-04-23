@@ -1,0 +1,15 @@
+extends game
+
+append stylesheets
+    link(rel='stylesheet', href='/stylesheets/games/dice.css')
+
+block game-content
+    .flex-column.fill
+        .content-box.flex-fill
+
+append sockets
+    script.
+        gameSocket = io('/dice');
+
+block game-scripts
+    script(src='/javascripts/games/dice.js')

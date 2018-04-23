@@ -17,7 +17,7 @@ app.set('trust proxy', true);
 var sess = session({
     secret: 'seOOOSPAPSDwag167321320sdmSKRRRgucciGAngGG,',
     //Change cookie to {httpOnly: true, secure: false} for test and {httpOnly: true, secure: true} for prod
-    cookie: {httpOnly: true, secure: true},
+    cookie: {httpOnly: true, secure: false},
     proxy: true,
     resave: true,
     saveUninitialized: true,
@@ -79,27 +79,14 @@ app.get('*', async function(req, res, next) {
     next();
 });
 
-//Create socketIO server
 var io = require('socket.io')();
-io.use(function(socket, next) {
-    sess(socket.request, socket.request.res, next);
-});
-
-//On new socket connection:
-io.on('connection', async function(socket){
-    try {
-        socket.request.session.user = await User.findOne({ _id: socket.request.session.userId }).exec();
-    } catch(e) {
-        delete socket.request.session.user;
-    }
-    socket.request.session.save();
-});
-
+require('./sockets/main')(io, sess);
+require('./sockets/games')(io.of('/games'), sess);
 app.io = io;
 
-
 // routes
-app.use('/', require('./routes/games/roulette')(io));
+app.use('/', require('./routes/games/roulette')(io.of('/roulette')));
+app.use('/dice', require('./routes/games/dice')(io.of('/dice')));
 app.use('/imprint', require('./routes/imprint'));
 
 app.use('/login', require('./routes/login'));
