@@ -1,74 +1,94 @@
 //Standard middleware
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const compression = require('compression')
 
 //Sessioning
-var session = require('express-session');
+const session = require('express-session');
 
 //Create app to export
-var app = express();
+const app = express();
+
+const isDev = process.env.NODE_ENV == null ? false : process.env.NODE_ENV.trim() === 'dev';
 
 app.set('trust proxy', true);
 
-var sess = session({
+//Mongoose
+const mongoose = require('mongoose');
+
+mongoose.Promise = require('bluebird');
+
+const options = {
+    useMongoClient: true,
+    autoIndex: isDev,
+    reconnectTries: Number.MAX_VALUE, // Never stop trying to reconnect
+    reconnectInterval: 500, // Reconnect every 500ms
+    poolSize: 128, // Maintain up to 10 socket connections
+    // If not connected, return errors immediately rather than waiting for reconnect
+    bufferMaxEntries: 0
+};
+
+mongoose.connect('mongodb://localhost:27017/CForce', options, err => {
+    if(err) {
+        console.log(err);
+    } else {
+        console.log('Connected to mongoDB');
+    }
+});
+
+const sess = session({
     secret: 'seOOOSPAPSDwag167321320sdmSKRRRgucciGAngGG,',
-    //Change cookie to {httpOnly: true, secure: false} for test and {httpOnly: true, secure: true} for prod
-    cookie: {httpOnly: true, secure: false},
+    cookie: {httpOnly: true, secure: !isDev},
     proxy: true,
     resave: true,
     saveUninitialized: true,
     store: new (require('express-sessions'))({
         storage: 'mongodb',
-        instance: mongoose, 
+        instance: mongoose,
         host: 'localhost',
         port: 27017,
-        db: 'CForce', 
+        db: 'CForce',
         collection: 'sessions',
         expire: 86400
     })
 });
+
 app.use(sess);
 
-//Mongoose
-var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/CForce', function(err) {
-    console.log('Connected to mongoDB');
-});
-
-mongoose.Promise = global.Promise;
-const db = mongoose.connection;
-
-require('./models/user');
-var User = mongoose.model('user');
+const User = require('./models/user.js');
 
 //Helmet (security stuff)
-var helmet = require('helmet');
+const helmet = require('helmet');
 app.use(helmet());
 
 //Useragent grabbing
-var useragent = require('express-useragent');
-app.use(useragent.express());
+const userAgent = require('express-useragent');
+app.use(userAgent.express());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+
+app.use(compression());
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, isDev ? 'public' : 'dist')));
 
-//On every page req:
-app.get('*', async function(req, res, next) {
+//On every page req verify their login
+app.get('*', async (req, res, next) => {
+    /*
     if(req.useragent.browser === 'IE') {
         return res.render('blocked');
-    };
+    }
+    */
 
     try {
         req.session.user = await User.findOne({ _id: req.session.userId }).exec();
@@ -79,7 +99,8 @@ app.get('*', async function(req, res, next) {
     next();
 });
 
-var io = require('socket.io')();
+const io = require('socket.io')();
+
 require('./sockets/main')(io, sess);
 require('./sockets/games')(io.of('/games'), sess);
 app.io = io;
@@ -87,7 +108,6 @@ app.io = io;
 // routes
 app.use('/', require('./routes/games/roulette')(io.of('/roulette')));
 app.use('/dice', require('./routes/games/dice')(io.of('/dice')));
-app.use('/imprint', require('./routes/imprint'));
 
 app.use('/login', require('./routes/login'));
 app.use('/logout', require('./routes/logout'));
@@ -95,18 +115,18 @@ app.use('/profile', require('./routes/profile'));
 app.use('/signup', require('./routes/signup'));
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-    var err = new Error('Not Found');
+app.use((req, res, next) => {
+    const err = new Error('Not Found');
     err.status = 404;
     next(err);
 });
 
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use((err, req, res, next) => {
     // set locals, only providing error in development
     res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
+    res.locals.error = isDev ? err : {};
 
     // render the error page
     res.status(err.status || 500);

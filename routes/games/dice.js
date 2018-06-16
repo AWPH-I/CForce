@@ -11,4 +11,4 @@ router.get('/', function(req, res, next) {
 
 module.exports = function(io) {
     return router;
-}
+};

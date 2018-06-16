@@ -62,3 +62,7 @@ data
 =======
 data
 >>>>>>> fc870f4be36883d7f0d51f95a537ef0cb250d57b
+
+
+.idea/
+dist/

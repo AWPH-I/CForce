@@ -1,21 +1,22 @@
 extends layout
 
 block content
-    .container(style='margin-top: 50px;')
-        form(action='/signup', method='post')
-            .form-group
-                label Username
-                input.form-control(type='text', name='username', placeholder='Username')
-            .form-group
-                label Email address
-                input.form-control(type='email', name='email', placeholder='Email')
-            .form-group
-                label Password
-                input.form-control(type='password', name='password', placeholder='Password')
-            .form-group
-                label Password Confirmation
-                input.form-control(type='password', name='passwordConf', placeholder='Password Confirmation')
-            .form-group
-                button.btn.btn-default(type='submit') Sign-up
+    .container-fluid.flex-fill
+        .row.fill.flex-centre
+            .col-lg-4.justify-content.flex-column.fill
+                h1 Welcome!
+                p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed<br> do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim.
+                form(action='/signup', method='post')
+                    .form-group
+                        input.form-control(type='text', name='username', placeholder='Username')
+                    .form-group
+                        input.form-control(type='email', name='email', placeholder='Email')
+                    .form-group
+                        input.form-control(type='password', name='password', placeholder='Password')
+                    .form-group
+                        input.form-control(type='password', name='passwordConf', placeholder='Password Confirmation')
+                    p <br>
+                    .form-group
+                        button.btn.btn-success(style="width: 100%", type='submit') Sign-up
 
     script(src='/javascripts/login.js')

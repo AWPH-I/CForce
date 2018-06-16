@@ -1,5 +1,5 @@
 function handlePOST(url, params) {
-    $.post(url, params, function(data, status){
+    $.post(url, params, (data, status) => {
         if(data.err) {
             throwErr(data.err);
         }
@@ -15,11 +15,18 @@ function handlePOST(url, params) {
 }
 
 function serializeForm(form) {
-    return $(form).serializeArray().reduce(function(obj, item) {
+    return $(form).serializeArray().reduce((obj, item) => {
         obj[item.name] = item.value;
         return obj;
     }, {});
 }
+
+$('.tabbed-pane a').click(function (e) {
+    e.preventDefault()
+    $(this).tab('show')
+});
+
+$('signup-button')[0].onclick = () => window.location = '/signup';
 
 $('form').submit(function(event) {
     event.preventDefault();

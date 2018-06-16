@@ -34,4 +34,4 @@ onmessage = function (event) {
 			}
 			break;
 	}
-}
+};

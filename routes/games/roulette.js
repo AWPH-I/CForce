@@ -17,22 +17,20 @@ Roulette.history = [];
 Roulette.getColor = function(roll) {
     if(roll === 0) return 'green';
     return (roll % 2 === 0) ? 'black' : 'red';
-}
+};
 
 Roulette.bets.reward = async function(roll) {
-    var winner = Roulette.getColor(roll);
+    const winner = Roulette.getColor(roll);
     console.log('Winner: ' + roll + ' ' + winner);
 
     if(Roulette.bets[winner].length === 0) return;
 
     for(let i = 0; i < Roulette.bets[winner].length; i ++) {
-        var user = await User.findOne({_id: Roulette.bets[winner][i].id}).exec();
+        const user = await User.findOne({_id: Roulette.bets[winner][i].id}).exec();
         user.balance += Roulette.bets[winner][i].amount * (winner === 'green' ? 14 : 2);
-        user.save().then((user) => {
-            if(i === Roulette.bets[winner].length) return;
-        });
+        user.save();
     }
-}
+};
 
 Roulette.bets.clear = function() {
     Roulette.bets.green = [];
@@ -40,7 +38,7 @@ Roulette.bets.clear = function() {
     Roulette.bets.black = [];
 
     Roulette.publicBets = [];
-}
+};
 
 router.get('/', function(req, res, next) {
     const injections = {lastSpin: Roulette.lastSpin, injTime: new Date().getTime(), history: Roulette.history, bets: Roulette.publicBets};
@@ -49,9 +47,10 @@ router.get('/', function(req, res, next) {
 
 
 module.exports = function(io) {
+
     Roulette.spin = function() {
         console.log('Spun at ' + new Date());
-        Roulette.lastSpin.result = Math.floor(Math.random() * (14 - 0 + 1));
+        Roulette.lastSpin.result = Math.floor(Math.random() * (14 + 1));
         Roulette.lastSpin.time = new Date().getTime();
 
         if(Roulette.history.length === 16) Roulette.history.shift();
@@ -62,12 +61,12 @@ module.exports = function(io) {
             console.log('Clearing... ');
             Roulette.bets.clear();
         });
-    }
+    };
 
     Roulette.interval = setInterval(Roulette.spin, 30000);
     Roulette.spin();
 
-    io.on('connection', function(socket){ 
+    io.on('connection', function(socket){
         socket.on('bet-send', async function(data) {
             try {
                 socket.request.session.user = await User.findOne({ _id: socket.request.session.userId }).exec();
@@ -77,7 +76,8 @@ module.exports = function(io) {
             }
             socket.request.session.save();
 
-            data.amount = Number(data.amount);       
+            data.amount = Number(data.amount);
+
             if(isNaN(data.amount)) return socket.emit('error-receive', {title: 'Invalid bet!', body:'Please try placing your bet again.', type:'warning'});
 
             if(socket.request.session.user == null) return socket.emit('error-receive', {title: 'Not logged in!', body:'Please create an account and/or login to bet.', type:'warning'});
@@ -109,4 +109,4 @@ module.exports = function(io) {
     });
 
     return router;
-}
+};

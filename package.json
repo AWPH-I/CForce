@@ -1,14 +1,19 @@
 {
   "name": "cforce",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "dev": "set NODE_ENV=dev && nodemon ./bin/www",
+    "start": "gulp prod && node ./bin/www"
   },
   "dependencies": {
+    "babel-preset-es2015": "^6.24.1",
+    "babel-register": "^6.26.0",
     "bcrypt": "^1.0.3",
     "bcrypt-nodejs": "^0.0.3",
+    "bluebird": "^3.5.1",
     "body-parser": "~1.18.2",
+    "compression": "^1.7.2",
     "connect-flash": "^0.1.1",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
@@ -24,5 +29,16 @@
     "pug": "^2.0.0-rc.4",
     "serve-favicon": "~2.4.5",
     "socket.io": "^2.0.4"
+  },
+  "devDependencies": {
+    "babel": "^6.23.0",
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "gulp": "gulpjs/gulp.git#4.0",
+    "gulp-babel": "^7.0.1",
+    "gulp-clean-css": "^3.9.4",
+    "gulp-minify": "^3.0.2",
+    "gulp-uglify": "^3.0.0",
+    "pump": "^3.0.0"
   }
 }

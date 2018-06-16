@@ -14,12 +14,10 @@ module.exports = function(io, sess) {
         }
         socket.request.session.save();
 
-        console.log(socket.request.session);
-
         socket.on('update-ui-req', async function(data) {
             socket.emit('update-ui-res', {balance: socket.request.session.user == null ? 0 : socket.request.session.user.balance});
         });
     });
 
     return io;
-}
+};

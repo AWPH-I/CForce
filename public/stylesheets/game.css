@@ -5,8 +5,8 @@
     height: 0;
 }
 
-::-webkit-scrollbar {
-    width: 0px;
+#chat-box::-webkit-scrollbar {
+    width: 0;
     background: transparent;
 }
 
@@ -25,8 +25,7 @@
     padding-left: 5px;
 
     border-radius: 25px;
-    border: 1px solid transparent;
-    border-color: var(--cl-carbon);
+    border: 1px solid var(--cl-carbon);
 
     word-break: break-all;
 }
@@ -37,7 +36,7 @@
 
 .chat-username {
     font-weight: bold;
-    padding-bottom: 0px !important;
+    padding-bottom: 0 !important;
     margin: 0;
 }
 
@@ -45,11 +44,7 @@
     width: 32px;
     height: 32px;
 
-    margin-top: auto;
-    margin-bottom: auto;
-
-    margin-left: 10px;
-    margin-right: 10px;
+    margin: auto 10px;
 }
 
 .chat-text {
@@ -67,8 +62,7 @@
 
     margin-bottom: 20px;
 
-    border: 1px solid transparent;
-    border-color: var(--cl-carbon);
+    border: 1px solid var(--cl-carbon);
 }
 
 #chat-button {
@@ -77,12 +71,10 @@
     position: absolute;
     right: 0;
     z-index: 3;
-    border-radius: 0;
-    border-bottom-right-radius: 2rem;
-    border-top-right-radius: 2rem;
+    border-radius: 0 2rem 2rem 0;
 }
 
-.flying-diamond {
+.flying-gem {
     position: fixed;
     transform: translate(-50%, -50%);
     z-index: 20001;

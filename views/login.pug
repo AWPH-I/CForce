@@ -2,15 +2,23 @@ extends layout
 
 
 block content
-    .container(style='margin-top: 50px;')
-        form#login-form(action='/login', method='post')
-            .form-group
-                label Email address
-                input.form-control(type='email', name='email', placeholder='Email')
-            .form-group
-                label Password
-                input.form-control(type='password', name='password', placeholder='Password')
-            .form-group
-                button.btn.btn-default(type='submit') Login
+    .container-fluid.flex-fill
+        .row.fill.flex-centre
+            .col-lg-4.justify-content.flex-column.fill
+                h1 Hello!
+                p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed<br> do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim.
+                form#login-form(action='/login', method='post')
+                    .form-group
+                        input.form-control(type='email', name='email', placeholder='Email')
+                    .form-group
+                        input.form-control(type='password', name='password', placeholder='Password')
+                    .form-check.ml-4
+                        input#stay-logged.form-check-input(type='checkbox')
+                        label.form-check-label(for='stay-logged', style="padding: 0;") Stay logged in?
+                    .form-group
+                        button.btn.btn-success(style="width: 100%", type='submit') Login
+                    .form-group
+                        button#signup-button.btn.btn-primary(style="width: 100%") New User? Sign up here!
+
 
     script(src='/javascripts/login.js')

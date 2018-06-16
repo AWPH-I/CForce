@@ -26,9 +26,11 @@ block game-content
                 button.btn.bet-amnt-btn(type='button') 1000
                 button.btn.bet-amnt-btn(type='button') 5000
             .input-group#bet-input-group
-                span#btnGroupAddon.input-group-addon Bet:
+                .input-group-prepend
+                    span.input-group-text Bet:
                 input.form-control#bet-input(type='number', value='1', min='1', aria-describedby='btnGroupAddon')
-                span#btnGroupAddon.input-group-addon #[i.fa.fa-diamond]  
+                .input-group-append
+                    span.input-group-text #[i.far.fa-gem]
 
         .row.flex-fill
             .col-sm-4.flex-column
@@ -45,4 +47,6 @@ block game-content
                         ul.bet-content(bet='black')
 
 block game-scripts
+    script(src='/javascripts/libs/hacktimer/HackTimer.silent.min.js')
+    script(src='/javascripts/libs/hacktimer/HackTimerWorker.min.js')
     script(src='/javascripts/games/roulette.js')

@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var User = require('mongoose').model('user');
 
-router.get('/', function(req, res, next) {
+router.get('/', (req, res, next) => {
     if(req.session.user != null) {
         res.redirect('/profile');
     } else {
@@ -10,18 +10,18 @@ router.get('/', function(req, res, next) {
     }
 });
 
-router.post('/', function (req, res, next) {
+router.post('/', async (req, res, next) => {
     if (req.body.email && req.body.password) {
-        User.authenticate(req.body.email, req.body.password, function(error, user) {
-            if(error || !user) {
-                res.json({ err:{title: 'Invalid credentials!', body:'The details you have provided are invalid.', type:'danger' } });
-            } else {
-                req.session.userId = user._id;
-                res.json({redirect:'/profile'});
-            }
-        });
+        const user = await User.authenticate(req.body.email, req.body.password);
+
+        if(user) {
+            req.session.userId = user._id;
+            return res.json({redirect:'/profile'});
+        } else {
+            return res.json({err:{title: 'Invalid credentials!', body:'The details you have provided are invalid.', type:'danger'}});
+        }
     } else {
-        res.json({ err:{title: 'Empty fields!', body:'Please provide all necessary information to login.', type:'warning'} });
+        res.json({err:{title: 'Empty fields!', body:'Please provide all necessary information to login.', type:'warning'}});
     }
 });
 

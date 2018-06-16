@@ -1,10 +1,10 @@
-var Chat = {};
+const Chat = {};
 
 Chat.box = $('#chat-box');
 Chat.content = $('#chat-content');
 Chat.input = $('#chat-input');
 
-Chat.messageReceive = function(data) {
+Chat.messageReceive = data => {
     const msg = document.createElement('li');
     msg.className = 'chat-message';
 
@@ -17,7 +17,7 @@ Chat.messageReceive = function(data) {
     div.className = 'flex-column';
     $(msg).append(div);
 
-    var p = document.createElement('p');
+    let p = document.createElement('p');
     p.className = 'chat-text chat-username';
     $(p).text(data.from);
     $(div).append(p);
@@ -29,18 +29,17 @@ Chat.messageReceive = function(data) {
 
     Chat.content.append(msg);
 
-    Chat.box.scroll(0, Chat.box.scrollHeight);
-}
+    Chat.box[0].scrollTop = Chat.box[0].scrollHeight;
+};
 
-Chat.messageSend = function() {
+Chat.messageSend = () => {
     gamesSocket.emit('chat-send', Chat.input.val());
     Chat.input.val('');
-}
+};
 
-gamesSocket.on('chat-receive', function (data) {
-    console.log(data);
+$('#chat-button')[0].onclick = () => Chat.messageSend();
+
+gamesSocket.on('chat-receive', data => {
     Chat.messageReceive(data);
 });
-
-var Utils = {};
 

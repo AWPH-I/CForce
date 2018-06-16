@@ -1,8 +1,6 @@
-const _ = {};
-
 $.fn.extend({
     animateCss: function (animationName, callback) {
-        var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+        const animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
         this.addClass('animated ' + animationName).one(animationEnd, function() {
             $(this).removeClass('animated ' + animationName);
             if (callback) {
@@ -18,15 +16,16 @@ function randRange(minimum, maximum) {
     return Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
 }
 
-function throwErr(data) { 
+function throwErr(data) {
+    $('.alert-card').remove();
     const err = document.createElement('div');
     err.className = 'animated bounceIn alert-card alert alert-' + data.type;
     err.innerHTML = '<b>' + data.title + '</b><br>' + data.body;
     
     const close = document.createElement('i');
-    close.onclick= function() { 
-        var cache = $(this.parentNode);
-        cache.animateCss('bounceOut', function() {
+    close.onclick = () => {
+        const cache = $(this.parentNode);
+        cache.animateCss('bounceOut', () => {
             cache.remove(); 
         });
     };
@@ -34,21 +33,17 @@ function throwErr(data) {
 
     $(err).append(close);
     $('body').append(err);
-
-    if($('.alert-card').length > 3) {
-        $('.alert-card')[0].remove();
-    }
 }
 
 //Only the main socket can handle ui
-mainSocket.on('update-ui-res', function(data) {
+mainSocket.on('update-ui-res', data => {
     console.log(data);
     if(data.balance != null) $('#balance-text').text(data.balance);
 });
 
 //Allows all sockets to send errors to the handler
-sockets.map(function(e){
-    e.on('error-receive', function (data) {
+sockets.map(t => {
+    t.on('error-receive', data => {
         throwErr(data);
-    })
+    });
 });

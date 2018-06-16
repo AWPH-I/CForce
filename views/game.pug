@@ -3,15 +3,7 @@ extends layout
 block stylesheets
     link(rel='stylesheet', href='/stylesheets/game.css')
 
-append sockets
-    script.
-        var gamesSocket = io('/games');
-        var gameSocket;
-        sockets.push(gamesSocket);
-
 block content
-    script.
-        sockets.push(gameSocket);
     .container-fluid.flex-fill
         .row.fill
             .col-lg-8.roulette-column
@@ -23,9 +15,13 @@ block content
                 
                 .input-group(style='width: 100%;')
                     input.form-control(type='text', id='chat-input', maxlength='256', onkeydown='if(event.keyCode == 13) $("#chat-button").click();')
-                    button.btn.btn-primary#chat-button(type='button', onClick='Chat.messageSend()') 
+                    button.btn.btn-primary#chat-button(type='button')
                         i.fa.fa-paper-plane(aria-hidden='true', style='margin-left: -4px;')
 
+    script.
+        var gamesSocket = io('/games');
+        var gameSocket;
+        sockets.push(gamesSocket);
+        sockets.push(gameSocket);
     script(src='/javascripts/game.js')
-
     block game-scripts

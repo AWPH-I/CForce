@@ -9,7 +9,7 @@
 
     --cl-rl-black: #212121;
     --cl-rl-red: #E53935;
-    --cl-rl-green: #43A047;
+    --cl-rl-green:   #43A047;
 }
 
 body {
@@ -19,6 +19,9 @@ body {
 html, body {
     height: 100%;
     min-width: 400px;
+
+    display: flex;
+    flex-direction: column;
 }
 
 .flex-centre {
@@ -34,24 +37,19 @@ html, body {
     width: 100%;
 
     padding: 20px;
-    margin: 20px;
-
     overflow-y: auto;
 
-    border: 1px solid transparent;
     border-radius: 25px;
-    border-color: var(--cl-carbon);
+    border: 1px solid var(--cl-carbon);
 
     background-color: var(--cl-off-white);
 
-    margin-left: auto; 
-    margin-right: auto;
+    margin: 20px auto;
 }
 
 .rounded-border {
-    border: 1px solid transparent;
     border-radius: 2000rem;
-    border-color: var(--cl-carbon);   
+    border: 1px solid var(--cl-carbon);
 }
 
 
@@ -124,11 +122,9 @@ html, body {
     padding: 0.5rem;
 }
 
-@media (min-width: 576px) {
-    body {
-        display: flex;
-        flex-direction: column;
-    }
+.justify-content {
+    display: flex;
+    justify-content: center;
 }
 
 @media screen and (min-width: 992px) {
