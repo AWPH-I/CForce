@@ -26,7 +26,10 @@ $('.tabbed-pane a').click(function (e) {
     $(this).tab('show')
 });
 
-$('signup-button')[0].onclick = () => window.location = '/signup';
+const $btn = $('#signup-button');
+if($btn.length > 0) {
+    $btn[0].onclick = () => window.location = '/signup';
+}
 
 $('form').submit(function(event) {
     event.preventDefault();

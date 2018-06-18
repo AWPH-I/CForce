@@ -23,8 +23,11 @@ function throwErr(data) {
     err.innerHTML = '<b>' + data.title + '</b><br>' + data.body;
     
     const close = document.createElement('i');
-    close.onclick = () => {
+    // DO NOT MAKE THIS AN ARROW FUNCTION AS IT CHANGES 'this' TO THE WINDOW
+    // NICE ONE JAVASCRIPT
+    close.onclick = function() {
         const cache = $(this.parentNode);
+        console.log(cache);
         cache.animateCss('bounceOut', () => {
             cache.remove(); 
         });
@@ -38,7 +41,9 @@ function throwErr(data) {
 //Only the main socket can handle ui
 mainSocket.on('update-ui-res', data => {
     console.log(data);
-    if(data.balance != null) $('#balance-text').text(data.balance);
+    if(data.balance != null) {
+        $('#balance-text').text(data.balance);
+    }
 });
 
 //Allows all sockets to send errors to the handler

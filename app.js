@@ -84,11 +84,9 @@ app.use(express.static(path.join(__dirname, isDev ? 'public' : 'dist')));
 
 //On every page req verify their login
 app.get('*', async (req, res, next) => {
-    /*
     if(req.useragent.browser === 'IE') {
         return res.render('blocked');
     }
-    */
 
     try {
         req.session.user = await User.findOne({ _id: req.session.userId }).exec();

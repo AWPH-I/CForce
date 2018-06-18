@@ -12,13 +12,12 @@ block content
                         input.form-control(type='email', name='email', placeholder='Email')
                     .form-group
                         input.form-control(type='password', name='password', placeholder='Password')
-                    .form-check.ml-4
+                    .form-check.ml-4.mb-3
                         input#stay-logged.form-check-input(type='checkbox')
                         label.form-check-label(for='stay-logged', style="padding: 0;") Stay logged in?
                     .form-group
                         button.btn.btn-success(style="width: 100%", type='submit') Login
-                    .form-group
-                        button#signup-button.btn.btn-primary(style="width: 100%") New User? Sign up here!
+                button#signup-button.btn.btn-primary(style="width: 100%") New User? Sign up here!
 
 
     script(src='/javascripts/login.js')

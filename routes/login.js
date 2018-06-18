@@ -1,6 +1,6 @@
-var express = require('express');
-var router = express.Router();
-var User = require('mongoose').model('user');
+const express = require('express');
+const router = express.Router();
+const User = require('mongoose').model('user');
 
 router.get('/', (req, res, next) => {
     if(req.session.user != null) {
@@ -21,7 +21,7 @@ router.post('/', async (req, res, next) => {
             return res.json({err:{title: 'Invalid credentials!', body:'The details you have provided are invalid.', type:'danger'}});
         }
     } else {
-        res.json({err:{title: 'Empty fields!', body:'Please provide all necessary information to login.', type:'warning'}});
+        return res.json({err:{title: 'Empty fields!', body:'Please provide all necessary information to login.', type:'warning'}});
     }
 });
 
