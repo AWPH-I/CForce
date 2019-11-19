@@ -32,7 +32,8 @@ router.post('/', async (req, res, next) => {
     const userData = {
         email: req.body.email,
         username: req.body.username,
-        password: req.body.password
+        password: req.body.password,
+        dateJoined: Date()
     };
 
     User.create(userData, (error, user) => {

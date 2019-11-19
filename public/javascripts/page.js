@@ -33,13 +33,13 @@ Chat.messageReceive = data => {
 };
 
 Chat.messageSend = () => {
-    gamesSocket.emit('chat-send', Chat.input.val());
+    pageSocket.emit('chat-send', Chat.input.val());
     Chat.input.val('');
 };
 
 $('#chat-button')[0].onclick = () => Chat.messageSend();
 
-gamesSocket.on('chat-receive', data => {
+pageSocket.on('chat', data => {
     Chat.messageReceive(data);
 });
 

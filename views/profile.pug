@@ -1,3 +1,36 @@
 extends layout
 
+block stylesheets
+    link(rel='stylesheet', href='/stylesheets/profile.css')
+
 block content
+    .container-fluid.flex-fill.flex-column
+        .row
+            .col-lg-7.flex-column
+                .content-box.flex-row.flex-fill.flex-centre
+                    .dp
+                    .flex-column.flex-fill
+                        h1 #{session.user.username}
+                        h4.joined Joined: #{session.user.dateJoined.toDateString()}
+
+            .col-lg-5.flex-column
+                .content-box.flex-column.flex-centre.flex-fill
+                    h3 Account Control Panel
+                    hr
+                    .flex-row 
+                        button.cp-btn.btn.btn-outline-secondary(type="button") Change Password
+                        button.cp-btn.btn.btn-outline-secondary(type="button") Change Username
+                        button.cp-btn.btn.btn-danger(type="button") Delete Account
+
+        .row.flex-fill
+            .col-lg-8.flex-column
+                .content-box.flex-column.align-items.flex-fill
+                    h1 Betting History
+                    hr
+
+            .col-lg-4.flex-column
+                .content-box.flex-column.align-items.flex-fill
+                    h3 The Gem Mine
+                    hr
+                    button.btn.btn-primary.flex-centre(type='button', style="width: 80%;")
+                        h5 Daily Gems

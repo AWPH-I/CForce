@@ -1,5 +1,5 @@
 :root {
-    /* Colours preface with a --cl-NAME, named by http://www.color-blindness.com/color-name-hue/ and aWpH--*/
+    /* Colours preface with a --cl-NAME, named by http://www.color-blindness.com/color-name-hue/ and awphi*/
     --cl-solitude: #ECEFF1;
     --cl-pattens-blue: #F7FBFC;
     --cl-carbon: rgba(0,0,0,0.1);
@@ -22,6 +22,10 @@ html, body {
 
     display: flex;
     flex-direction: column;
+}
+
+hr {
+    width: 90%;
 }
 
 .flex-centre {
@@ -80,6 +84,11 @@ html, body {
     position: absolute;
 }
 
+.fill-margin: {
+    width: 100%;
+    height: 100%;
+}
+
 .fill {
     width: 100%;
     height: 100%;
@@ -101,8 +110,7 @@ html, body {
     left: 25%;
     text-align: center;
 
-    word-break: 
-    break-word; 
+    word-break: break-word; 
     max-width: 50vw;
     z-index: 5000;
 }
@@ -120,6 +128,11 @@ html, body {
 
 .nav-padded {
     padding: 0.5rem;
+}
+
+.align-items {
+    display: flex;
+    align-items: center;
 }
 
 .justify-content {

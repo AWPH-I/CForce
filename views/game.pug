@@ -18,10 +18,11 @@ block content
                     button.btn.btn-primary#chat-button(type='button')
                         i.fa.fa-paper-plane(aria-hidden='true', style='margin-left: -4px;')
 
+block scripts
     script.
-        var gamesSocket = io('/games');
+        var pageSocket = io('/page');
         var gameSocket;
-        sockets.push(gamesSocket);
+        sockets.push(pageSocket);
         sockets.push(gameSocket);
-    script(src='/javascripts/game.js')
+    script(src='/javascripts/page.js')
     block game-scripts

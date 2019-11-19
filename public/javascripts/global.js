@@ -11,6 +11,29 @@ $.fn.extend({
     }
 });
 
+function handlePOST(url, params) {
+    $.post(url, params, (data, status) => {
+        if(data.err) {
+            throwErr(data.err);
+        }
+
+        if(data.redirect) {
+            window.location = data.redirect;
+        }
+
+        if(data.log) {
+            console.log(data.log);
+        }
+    });
+}
+
+function serializeForm(form) {
+    return $(form).serializeArray().reduce((obj, item) => {
+        obj[item.name] = item.value;
+        return obj;
+    }, {});
+}
+
 //Both ranges inclusive
 function randRange(minimum, maximum) {
     return Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
@@ -38,17 +61,30 @@ function throwErr(data) {
     $('body').append(err);
 }
 
-//Only the main socket can handle ui
-mainSocket.on('update-ui-res', data => {
-    console.log(data);
+function getSocket(nsp) {
+    if(nsp === "") {
+        nsp = "/";
+    }
+
+    for(var i = 0; i < sockets.length; i ++) {
+        if(sockets[i].nsp === nsp) {
+            return sockets[i];
+        }
+    }
+
+    return null;
+}
+
+function updateUI(data) {
     if(data.balance != null) {
         $('#balance-text').text(data.balance);
     }
+}
+
+mainSocket.on('update-ui', data => {
+    updateUI(data);
 });
 
-//Allows all sockets to send errors to the handler
-sockets.map(t => {
-    t.on('error-receive', data => {
-        throwErr(data);
-    });
+mainSocket.on('err', data => {
+    throwErr(data);
 });

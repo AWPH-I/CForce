@@ -5,7 +5,7 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const compression = require('compression')
+const compression = require('compression');
 
 //Sessioning
 const session = require('express-session');
@@ -13,7 +13,7 @@ const session = require('express-session');
 //Create app to export
 const app = express();
 
-const isDev = process.env.NODE_ENV == null ? false : process.env.NODE_ENV.trim() === 'dev';
+const IS_DEV = process.env.NODE_ENV == null ? false : process.env.NODE_ENV.trim() === 'dev';
 
 app.set('trust proxy', true);
 
@@ -24,7 +24,7 @@ mongoose.Promise = require('bluebird');
 
 const options = {
     useMongoClient: true,
-    autoIndex: isDev,
+    autoIndex: IS_DEV,
     reconnectTries: Number.MAX_VALUE, // Never stop trying to reconnect
     reconnectInterval: 500, // Reconnect every 500ms
     poolSize: 128, // Maintain up to 10 socket connections
@@ -42,7 +42,7 @@ mongoose.connect('mongodb://localhost:27017/CForce', options, err => {
 
 const sess = session({
     secret: 'seOOOSPAPSDwag167321320sdmSKRRRgucciGAngGG,',
-    cookie: {httpOnly: true, secure: !isDev},
+    cookie: {httpOnly: true, secure: !IS_DEV},
     proxy: true,
     resave: true,
     saveUninitialized: true,
@@ -80,7 +80,7 @@ app.use(compression());
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, isDev ? 'public' : 'dist')));
+app.use(express.static(path.join(__dirname, IS_DEV ? 'public' : 'dist')));
 
 //On every page req verify their login
 app.get('*', async (req, res, next) => {
@@ -100,13 +100,14 @@ app.get('*', async (req, res, next) => {
 const io = require('socket.io')();
 
 require('./sockets/main')(io, sess);
-require('./sockets/games')(io.of('/games'), sess);
+require('./sockets/page')(io.of('/page'), sess);
 app.io = io;
 
-// routes
-app.use('/', require('./routes/games/roulette')(io.of('/roulette')));
-app.use('/dice', require('./routes/games/dice')(io.of('/dice')));
+// Socketed Routes
+app.use('/', require('./routes/games/roulette')(io.of('/page/roulette')));
+app.use('/dice', require('./routes/games/dice')(io.of('/page/dice')));
 
+// Non-socketed Routes
 app.use('/login', require('./routes/login'));
 app.use('/logout', require('./routes/logout'));
 app.use('/profile', require('./routes/profile'));
@@ -124,7 +125,7 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
     // set locals, only providing error in development
     res.locals.message = err.message;
-    res.locals.error = isDev ? err : {};
+    res.locals.error = IS_DEV ? err : {};
 
     // render the error page
     res.status(err.status || 500);

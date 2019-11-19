@@ -16,9 +16,9 @@ module.exports = (io, sess) => {
             if(socket.request.session.user != null) {
                 msg = sanitiseMessage(msg);
                 if(msg === '') return;
-                io.emit('chat-receive', {from: socket.request.session.user.username, message: msg});
+                io.emit('chat', {from: socket.request.session.user.username, message: msg});
             } else {
-                socket.emit('error-receive', {title: 'Not logged in!', body:'Please create an account and/or login to chat.', type:'warning'});
+                socket.emit('err', {title: 'Not logged in!', body:'Please create an account and/or login to chat.', type:'warning'});
             }
 
         });

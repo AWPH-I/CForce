@@ -54,13 +54,32 @@ html
         script(src='/javascripts/libs/socket.io.min.js')
         block sockets
             script.
-                var mainSocket = io();
+                var mainSocket = io('/');
                 const sockets = [mainSocket];
 
         block content
 
-        script(src='/javascripts/libs/popper.min.js')
-        script(src='/javascripts/libs/bootstrap.min.js')
         script(src='/javascripts/global.js')
         block scripts
+        script(src='/javascripts/libs/popper.min.js')
+        script(src='/javascripts/libs/bootstrap.min.js')
+        script.
+            sockets.map(t => {
+                t.io._timeout = 60000;
+                t._onevent = t.onevent;
+
+                t.onevent = function(packet) {
+                    console.log(packet);
+                    if(!Object.keys(t._callbacks).map(x => x.substr(1)).includes(packet.data[0]) ) {
+                        if(packet.nsp === "") {
+                            console.log(`WARNING: Unhandled Event: ${packet.data}`);
+                        } else {
+                            packet.nsp = packet.nsp.substring(0, packet.nsp.lastIndexOf("/"))
+                            getSocket(packet.nsp).onevent(packet)
+                        }   
+                    } else {
+                        t._onevent.apply(t, Array.prototype.slice.call(arguments));
+                    }
+                };
+            });
 

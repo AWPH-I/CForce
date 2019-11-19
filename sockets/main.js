@@ -13,10 +13,6 @@ module.exports = function(io, sess) {
             delete socket.request.session.user;
         }
         socket.request.session.save();
-
-        socket.on('update-ui-req', async function(data) {
-            socket.emit('update-ui-res', {balance: socket.request.session.user == null ? 0 : socket.request.session.user.balance});
-        });
     });
 
     return io;

@@ -8,18 +8,28 @@ const UserSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+
     username: {
         type: String,
         unique: true,
         required: true,
         trim: true
     },
+
     password: {
         type: String,
         required: true
-    }, balance: {
+    }, 
+
+    balance: {
         type: Number,
         default: 0
+    },
+
+    dateJoined: {
+        type: Date,
+        default: Date(0),
+        required: true
     }
 });
 

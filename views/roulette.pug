@@ -5,7 +5,7 @@ append stylesheets
 
 append sockets
     script.
-        gameSocket = io('/roulette');
+        gameSocket = io('/page/roulette');
 
 block game-content
     .flex-column.fill
@@ -34,7 +34,7 @@ block game-content
 
         .row.flex-fill
             .col-sm-4.flex-column
-                button.cl-rl-red.bet-btn(type='button', bet='red') Red (1 to 7)
+                button.cl-rl-red.bet-btn(type='button', bet='red') Red (Odds)
                 .content-box.flex-fill
                     ul.bet-content(bet='red')
             .col-sm-4.flex-column
@@ -42,7 +42,7 @@ block game-content
                 .content-box.flex-fill
                     ul.bet-content(bet='green')
             .col-sm-4.flex-column
-                button.cl-rl-black.bet-btn(type='button', bet='black') Black (8 to 14)
+                button.cl-rl-black.bet-btn(type='button', bet='black') Black (Evens)
                 .content-box.flex-fill
                         ul.bet-content(bet='black')
 
